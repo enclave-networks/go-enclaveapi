@@ -7,5 +7,5 @@ type AccountOrganisation struct {
 }
 
 type AccountOrganisationTopLevel struct {
-	Orgs *[]AccountOrganisation
+	Orgs []*AccountOrganisation
 }
