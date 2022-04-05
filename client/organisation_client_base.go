@@ -1,6 +1,7 @@
 package client
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -8,18 +9,32 @@ import (
 	"net/url"
 )
 
+func Encode(data any) (*bytes.Buffer, error) {
+	postBody, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	requestBody := bytes.NewBuffer(postBody)
+
+	return requestBody, nil
+}
+
 func Decode[T any](response *http.Response) *T {
 	var toDecode = new(T)
 	json.NewDecoder(response.Body).Decode(toDecode)
 	return toDecode
 }
 
-func (client *OrganisationClient) createOrgRequest(route string, method string, body io.Reader) (*http.Request, error) {
+func (client *OrganisationClient) createRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	orgRoute := fmt.Sprintf("org/%s%s", *client.currentOrg.OrgId, route)
 	reqUrl := getRequestUrl(client.baseURL, orgRoute)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
-
 	fmt.Println(reqUrl.String())
+
+	if body != nil {
+		req.Header.Add("Content-Type", "application/json")
+	}
 
 	if err != nil {
 		return nil, err

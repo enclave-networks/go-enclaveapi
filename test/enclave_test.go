@@ -6,19 +6,50 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/client"
 )
 
-func Test_when_making_a_call_to_GetSystems_should_return_items(t *testing.T) {
-	token := "p9rcFksNsHALkfyqyfgRzYq4AXwcuxr22CN9Mc5PG42umHPUiPhnzX7kiRfdWM3"
+var token string = "p9rcFksNsHALkfyqyfgRzYq4AXwcuxr22CN9Mc5PG42umHPUiPhnzX7kiRfdWM3"
+
+// https://stackoverflow.com/questions/47436263/how-to-mock-http-client-that-returns-a-json-response
+func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 	enclaveClient := client.CreateClient(&token)
 
 	orgs, _ := enclaveClient.GetOrgs()
 
-	enclaveClient.SetCurrentOrg(orgs[0])
-	sys, err := enclaveClient.GetSystems(nil, nil, nil, nil, nil, nil, nil)
+	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
+	org, err := organisationClient.Get()
 	if err != nil {
-		t.Errorf("error: %s", err)
+		t.Error(err)
 	}
 
-	if len(sys.Items) == 0 {
-		t.Errorf("no items in return type")
+	if org == nil {
+		t.Error("org is nil")
+	}
+}
+
+func Test_when_calling_organisation_returns_values(t *testing.T) {
+	enclaveClient := client.CreateClient(&token)
+
+	orgs, _ := enclaveClient.GetOrgs()
+
+	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
+
+	email := "tom.soulard+1337@enclave.io"
+	err := organisationClient.InviteUser(&email)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	invites, err := organisationClient.GetPendingInvites()
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(invites) != 1 {
+		t.Errorf("expected count of 1 got count of %v", len(invites))
+	}
+
+	err = organisationClient.CancelUser(&email)
+	if err != nil {
+		t.Error(err)
 	}
 }

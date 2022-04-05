@@ -1,8 +1,6 @@
 package client
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -17,7 +15,7 @@ func (client *OrganisationClient) GetSystems(
 	dnsName *string,
 	pageNumber *int,
 	perPage *int) (*data.PaginatedResponse[data.EnrolledSystemSummary], error) {
-	req, err := client.createOrgRequest("/systems", "GET", nil)
+	req, err := client.createRequest("/systems", "GET", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -28,13 +26,12 @@ func (client *OrganisationClient) GetSystems(
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
 		return nil, err
 	}
-
-	defer response.Body.Close()
 
 	systems := Decode[data.PaginatedResponse[data.EnrolledSystemSummary]](response)
 
@@ -42,14 +39,12 @@ func (client *OrganisationClient) GetSystems(
 }
 
 func (client *OrganisationClient) RevokeSystems(systemIds ...*string) (*int, error) {
-	postBody, err := json.Marshal(systemIds)
+	requestBody, err := Encode(systemIds)
 	if err != nil {
 		return nil, err
 	}
 
-	requestBody := bytes.NewBuffer(postBody)
-
-	req, err := client.createOrgRequest("/systems", "DELETE", requestBody)
+	req, err := client.createRequest("/systems", "DELETE", requestBody)
 	if err != nil {
 		return nil, err
 	}
@@ -57,6 +52,7 @@ func (client *OrganisationClient) RevokeSystems(systemIds ...*string) (*int, err
 	if err != nil {
 		return nil, err
 	}
+	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
