@@ -7,7 +7,11 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
-func (client *OrganisationClient) GetSystems(
+type EnrolledSystemsClient struct {
+	base *ClientBase
+}
+
+func (client *EnrolledSystemsClient) GetSystems(
 	enrolmentKeyId *int,
 	searchTerm *string,
 	includeDisabled *bool,
@@ -15,14 +19,14 @@ func (client *OrganisationClient) GetSystems(
 	dnsName *string,
 	pageNumber *int,
 	perPage *int) (*data.PaginatedResponse[data.EnrolledSystemSummary], error) {
-	req, err := client.createRequest("/systems", "GET", nil)
+	req, err := client.base.createRequest("/systems", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	buildSystemsQuery(req, enrolmentKeyId, searchTerm, includeDisabled, sortOrder, dnsName, pageNumber, perPage)
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -38,17 +42,17 @@ func (client *OrganisationClient) GetSystems(
 	return systems, nil
 }
 
-func (client *OrganisationClient) RevokeSystems(systemIds ...*string) (*int, error) {
+func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...*string) (*int, error) {
 	requestBody, err := Encode(systemIds)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := client.createRequest("/systems", "DELETE", requestBody)
+	req, err := client.base.createRequest("/systems", http.MethodDelete, requestBody)
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}

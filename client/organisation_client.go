@@ -3,25 +3,23 @@ package client
 import (
 	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
 type OrganisationClient struct {
-	baseURL    *url.URL
-	token      *string
-	httpClient *http.Client
-	currentOrg *data.AccountOrganisation
+	base         *ClientBase
+	Systems      *EnrolledSystemsClient
+	EnrolmentKey *EnrolmentKeyClient
 }
 
 func (client *OrganisationClient) Get() (*data.Organisation, error) {
-	req, err := client.createRequest("", "GET", nil)
+	req, err := client.base.createRequest("", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -43,12 +41,12 @@ func (client *OrganisationClient) Update(patch *data.OrganisationPatch) (*data.O
 		return nil, err
 	}
 
-	req, err := client.createRequest("", "POST", requestBody)
+	req, err := client.base.createRequest("", http.MethodPost, requestBody)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -65,12 +63,12 @@ func (client *OrganisationClient) Update(patch *data.OrganisationPatch) (*data.O
 }
 
 func (client *OrganisationClient) GetOrganisationUsers() ([]*data.OrganisationUser, error) {
-	req, err := client.createRequest("/users", "GET", nil)
+	req, err := client.base.createRequest("/users", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +86,12 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]*data.OrganisationUs
 
 func (client *OrganisationClient) RemoveUser(accountId *string) error {
 	route := fmt.Sprintf("/users/%s", *accountId)
-	req, err := client.createRequest(route, "DELETE", nil)
+	req, err := client.base.createRequest(route, http.MethodDelete, nil)
 	if err != nil {
 		return err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -108,12 +106,12 @@ func (client *OrganisationClient) RemoveUser(accountId *string) error {
 }
 
 func (client *OrganisationClient) GetPendingInvites() ([]*data.OrganisationInvite, error) {
-	req, err := client.createRequest("/invites", "GET", nil)
+	req, err := client.base.createRequest("/invites", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -137,12 +135,12 @@ func (client *OrganisationClient) InviteUser(emailAddress *string) error {
 		return err
 	}
 
-	req, err := client.createRequest("/invites", "POST", requestBody)
+	req, err := client.base.createRequest("/invites", http.MethodPost, requestBody)
 	if err != nil {
 		return err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -164,12 +162,12 @@ func (client *OrganisationClient) CancelUser(emailAddress *string) error {
 		return err
 	}
 
-	req, err := client.createRequest("/invites", "DELETE", requestBody)
+	req, err := client.base.createRequest("/invites", http.MethodDelete, requestBody)
 	if err != nil {
 		return err
 	}
 
-	response, err := client.httpClient.Do(req)
+	response, err := client.base.httpClient.Do(req)
 	if err != nil {
 		return err
 	}

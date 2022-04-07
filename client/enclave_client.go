@@ -33,7 +33,7 @@ func CreateClient(token *string) *EnclaveClient {
 }
 
 func (client *EnclaveClient) GetOrgs() ([]*data.AccountOrganisation, error) {
-	req, err := client.createEnclaveRequest("/account/orgs", "GET", nil)
+	req, err := client.createEnclaveRequest("/account/orgs", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -51,11 +51,20 @@ func (client *EnclaveClient) GetOrgs() ([]*data.AccountOrganisation, error) {
 }
 
 func (client *EnclaveClient) CreateOrganisationClient(org *data.AccountOrganisation) *OrganisationClient {
-	return &OrganisationClient{
+	base := &ClientBase{
 		baseURL:    client.baseURL,
 		token:      client.token,
 		httpClient: client.httpClient,
 		currentOrg: org,
+	}
+	return &OrganisationClient{
+		base: base,
+		Systems: &EnrolledSystemsClient{
+			base: base,
+		},
+		EnrolmentKey: &EnrolmentKeyClient{
+			base: base,
+		},
 	}
 }
 

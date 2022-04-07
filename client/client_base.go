@@ -7,7 +7,16 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/enclave-networks/go-enclaveapi/data"
 )
+
+type ClientBase struct {
+	baseURL    *url.URL
+	token      *string
+	httpClient *http.Client
+	currentOrg *data.AccountOrganisation
+}
 
 func Encode(data any) (*bytes.Buffer, error) {
 	postBody, err := json.Marshal(data)
@@ -26,11 +35,11 @@ func Decode[T any](response *http.Response) *T {
 	return toDecode
 }
 
-func (client *OrganisationClient) createRequest(route string, method string, body io.Reader) (*http.Request, error) {
+func (client *ClientBase) createRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	orgRoute := fmt.Sprintf("org/%s%s", *client.currentOrg.OrgId, route)
+
 	reqUrl := getRequestUrl(client.baseURL, orgRoute)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
-	fmt.Println(reqUrl.String())
 
 	if body != nil {
 		req.Header.Add("Content-Type", "application/json")
