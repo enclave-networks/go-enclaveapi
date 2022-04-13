@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/enclave-networks/go-enclaveapi/client"
 	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/enclave"
 )
 
 var token string = "p9rcFksNsHALkfyqyfgRzYq4AXwcuxr22CN9Mc5PG42umHPUiPhnzX7kiRfdWM3"
@@ -21,7 +21,7 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 
 	defer testServer.Close()
 
-	enclaveClient, err := client.CreateClientWithUrl(&token, &testServer.URL)
+	enclaveClient, err := enclave.CreateClientWithUrl(&token, &testServer.URL)
 	if err != nil {
 		t.Error(err)
 	}
@@ -43,7 +43,7 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 }
 
 func Test_when_calling_organisation_returns_values(t *testing.T) {
-	enclaveClient := client.CreateClient(&token)
+	enclaveClient := enclave.CreateClient(&token)
 
 	orgs, _ := enclaveClient.GetOrgs()
 
