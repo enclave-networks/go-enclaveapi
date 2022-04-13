@@ -1,18 +1,35 @@
 package enclaveclient_test
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/enclave-networks/go-enclaveapi/client"
+	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
 var token string = "p9rcFksNsHALkfyqyfgRzYq4AXwcuxr22CN9Mc5PG42umHPUiPhnzX7kiRfdWM3"
 
 // https://stackoverflow.com/questions/47436263/how-to-mock-http-client-that-returns-a-json-response
 func Test_when_calling_organisation_get_returns_values(t *testing.T) {
-	enclaveClient := client.CreateClient(&token)
+	testServer, err := createTestServer(200, nil)
+	if err != nil {
+		t.Error(err)
+	}
 
-	orgs, _ := enclaveClient.GetOrgs()
+	defer testServer.Close()
+
+	enclaveClient, err := client.CreateClientWithUrl(&token, &testServer.URL)
+	if err != nil {
+		t.Error(err)
+	}
+
+	orgs, err := enclaveClient.GetOrgs()
+	if err != nil {
+		t.Error(err)
+	}
 
 	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
 	org, err := organisationClient.Get()
@@ -52,4 +69,40 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server, error) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		id := "thing"
+		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisation{
+			OrgId: &id,
+		})
+
+		if req.RequestURI == "/account/orgs" {
+			res.WriteHeader(expected)
+			res.Write(accountOrganisationBody)
+			return
+		}
+
+		if httpMatches == nil {
+			return
+		}
+
+		for _, httpMatch := range httpMatches {
+			if req.RequestURI == httpMatch.Uri {
+				body, _ := json.Marshal(httpMatch.Body)
+
+				res.WriteHeader(expected)
+				res.Write(body)
+				return
+			}
+		}
+	}))
+
+	return testServer, nil
+}
+
+type HttpMatch struct {
+	Body any
+	Uri  string
 }

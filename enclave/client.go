@@ -1,4 +1,4 @@
-package client
+package enclave
 
 import (
 	"encoding/json"
@@ -11,13 +11,13 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
-type EnclaveClient struct {
+type Client struct {
 	baseURL    *url.URL
 	token      *string
 	httpClient *http.Client
 }
 
-func CreateClient(token *string) *EnclaveClient {
+func CreateClient(token *string) *Client {
 	httpClient := &http.Client{Timeout: time.Minute}
 
 	baseUrl := &url.URL{
@@ -25,14 +25,29 @@ func CreateClient(token *string) *EnclaveClient {
 		Host:   data.BaseUrl,
 	}
 
-	return &EnclaveClient{
+	return &Client{
 		httpClient: httpClient,
 		token:      token,
 		baseURL:    baseUrl,
 	}
 }
 
-func (client *EnclaveClient) GetOrgs() ([]*data.AccountOrganisation, error) {
+func CreateClientWithUrl(token *string, baseUrl *string) (*Client, error) {
+	httpClient := &http.Client{Timeout: time.Minute}
+
+	parsedUrl, err := url.Parse(*baseUrl)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Client{
+		httpClient: httpClient,
+		token:      token,
+		baseURL:    parsedUrl,
+	}, nil
+}
+
+func (client *Client) GetOrgs() ([]*data.AccountOrganisation, error) {
 	req, err := client.createEnclaveRequest("/account/orgs", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -50,7 +65,7 @@ func (client *EnclaveClient) GetOrgs() ([]*data.AccountOrganisation, error) {
 	return orgTopLevel.Orgs, nil
 }
 
-func (client *EnclaveClient) CreateOrganisationClient(org *data.AccountOrganisation) *OrganisationClient {
+func (client *Client) CreateOrganisationClient(org *data.AccountOrganisation) *OrganisationClient {
 	base := &ClientBase{
 		baseURL:    client.baseURL,
 		token:      client.token,
@@ -68,7 +83,7 @@ func (client *EnclaveClient) CreateOrganisationClient(org *data.AccountOrganisat
 	}
 }
 
-func (client *EnclaveClient) createEnclaveRequest(route string, method string, body io.Reader) (*http.Request, error) {
+func (client *Client) createEnclaveRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	reqUrl := getRequestUrl(client.baseURL, route)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
 
