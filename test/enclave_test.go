@@ -37,7 +37,7 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 		t.Error(err)
 	}
 
-	if org == nil {
+	if org.Id == "" {
 		t.Error("org is nil")
 	}
 }

@@ -13,53 +13,53 @@ type OrganisationClient struct {
 	EnrolmentKey *EnrolmentKeyClient
 }
 
-func (client *OrganisationClient) Get() (*data.Organisation, error) {
+func (client *OrganisationClient) Get() (data.Organisation, error) {
 	req, err := client.base.createRequest("", http.MethodGet, nil)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 
 	org := Decode[data.Organisation](response)
 
-	return org, nil
+	return *org, nil
 }
 
-func (client *OrganisationClient) Update(patch data.OrganisationPatch) (*data.Organisation, error) {
+func (client *OrganisationClient) Update(patch data.OrganisationPatch) (data.Organisation, error) {
 	requestBody, err := Encode(patch)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 
 	req, err := client.base.createRequest("", http.MethodPost, requestBody)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.Organisation{}, err
 	}
 
 	org := Decode[data.Organisation](response)
 
-	return org, nil
+	return *org, nil
 }
 
 func (client *OrganisationClient) GetOrganisationUsers() ([]data.OrganisationUser, error) {

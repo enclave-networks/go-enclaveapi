@@ -42,7 +42,7 @@ func (client *EnrolledSystemsClient) GetSystems(
 	return systems.Items, nil
 }
 
-func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...*string) (int, error) {
+func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...string) (int, error) {
 	requestBody, err := Encode(systemIds)
 	if err != nil {
 		return -1, err
