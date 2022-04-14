@@ -12,19 +12,19 @@ type EnrolledSystemsClient struct {
 }
 
 func (client *EnrolledSystemsClient) GetSystems(
-	enrolmentKeyId int,
-	searchTerm string,
-	includeDisabled bool,
-	sortOrder int,
-	dnsName string,
-	pageNumber int,
-	perPage int) (*data.PaginatedResponse[data.EnrolledSystemSummary], error) {
+	enrolmentKeyId *int,
+	searchTerm *string,
+	includeDisabled *bool,
+	sortOrder *int,
+	dnsName *string,
+	pageNumber *int,
+	perPage *int) ([]data.EnrolledSystemSummary, error) {
 	req, err := client.base.createRequest("/systems", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	buildSystemsQuery(req, &enrolmentKeyId, &searchTerm, &includeDisabled, &sortOrder, &dnsName, &pageNumber, &perPage)
+	buildSystemsQuery(req, enrolmentKeyId, searchTerm, includeDisabled, sortOrder, dnsName, pageNumber, perPage)
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
@@ -39,7 +39,7 @@ func (client *EnrolledSystemsClient) GetSystems(
 
 	systems := Decode[data.PaginatedResponse[data.EnrolledSystemSummary]](response)
 
-	return systems, nil
+	return systems.Items, nil
 }
 
 func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...*string) (*int, error) {

@@ -17,7 +17,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func CreateClient(token string) *Client {
+func New(token string) *Client {
 	httpClient := &http.Client{Timeout: time.Minute}
 
 	baseUrl := &url.URL{
@@ -47,7 +47,7 @@ func CreateClientWithUrl(token string, baseUrl string) (*Client, error) {
 	}, nil
 }
 
-func (client *Client) GetOrgs() (*[]data.AccountOrganisation, error) {
+func (client *Client) GetOrgs() ([]data.AccountOrganisation, error) {
 	req, err := client.createEnclaveRequest("/account/orgs", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (client *Client) GetOrgs() (*[]data.AccountOrganisation, error) {
 	var orgTopLevel data.AccountOrganisationTopLevel
 	json.NewDecoder(response.Body).Decode(&orgTopLevel)
 
-	return &orgTopLevel.Orgs, nil
+	return orgTopLevel.Orgs, nil
 }
 
 func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *OrganisationClient {

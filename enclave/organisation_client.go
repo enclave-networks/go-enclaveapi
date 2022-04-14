@@ -62,7 +62,7 @@ func (client *OrganisationClient) Update(patch data.OrganisationPatch) (*data.Or
 	return org, nil
 }
 
-func (client *OrganisationClient) GetOrganisationUsers() (*[]data.OrganisationUser, error) {
+func (client *OrganisationClient) GetOrganisationUsers() ([]data.OrganisationUser, error) {
 	req, err := client.base.createRequest("/users", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -81,7 +81,7 @@ func (client *OrganisationClient) GetOrganisationUsers() (*[]data.OrganisationUs
 
 	orgUsers := Decode[data.OrganisationUsersTopLevel](response)
 
-	return &orgUsers.Users, nil
+	return orgUsers.Users, nil
 }
 
 func (client *OrganisationClient) RemoveUser(accountId string) error {
@@ -105,7 +105,7 @@ func (client *OrganisationClient) RemoveUser(accountId string) error {
 	return nil
 }
 
-func (client *OrganisationClient) GetPendingInvites() (*[]data.OrganisationInvite, error) {
+func (client *OrganisationClient) GetPendingInvites() ([]data.OrganisationInvite, error) {
 	req, err := client.base.createRequest("/invites", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -124,7 +124,7 @@ func (client *OrganisationClient) GetPendingInvites() (*[]data.OrganisationInvit
 
 	orgInvites := Decode[data.OrganisationPendingInvites](response)
 
-	return &orgInvites.Invites, nil
+	return orgInvites.Invites, nil
 }
 
 func (client *OrganisationClient) InviteUser(emailAddress string) error {

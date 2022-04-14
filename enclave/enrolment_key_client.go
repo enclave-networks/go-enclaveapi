@@ -12,13 +12,13 @@ type EnrolmentKeyClient struct {
 	base *ClientBase
 }
 
-func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm string, includeDisabled bool, sortOrder int, pageNumber int, perPage int) (*[]data.EnrolmentKeySummary, error) {
+func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDisabled *bool, sortOrder *int, pageNumber *int, perPage *int) ([]data.EnrolmentKeySummary, error) {
 	req, err := client.base.createRequest("/enrolment-keys", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	buildEnrolmentKeyQuery(req, &searchTerm, &includeDisabled, &sortOrder, &pageNumber, &perPage)
+	buildEnrolmentKeyQuery(req, searchTerm, includeDisabled, sortOrder, pageNumber, perPage)
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
@@ -33,7 +33,7 @@ func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm string, includeDis
 
 	enrolmentKeys := Decode[data.PaginatedResponse[data.EnrolmentKeySummary]](response)
 
-	return &enrolmentKeys.Items, nil
+	return enrolmentKeys.Items, nil
 }
 
 func (client *EnrolmentKeyClient) Create(create *data.EnrolmentKeyCreate) (*data.EnrolmentKey, error) {

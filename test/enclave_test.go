@@ -21,7 +21,7 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 
 	defer testServer.Close()
 
-	enclaveClient, err := enclave.CreateClientWithUrl(&token, &testServer.URL)
+	enclaveClient, err := enclave.CreateClientWithUrl(token, testServer.URL)
 	if err != nil {
 		t.Error(err)
 	}
@@ -43,14 +43,14 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 }
 
 func Test_when_calling_organisation_returns_values(t *testing.T) {
-	enclaveClient := enclave.CreateClient(&token)
+	enclaveClient := enclave.New(token)
 
 	orgs, _ := enclaveClient.GetOrgs()
 
 	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
 
 	email := "tom.soulard+1337@enclave.io"
-	err := organisationClient.InviteUser(&email)
+	err := organisationClient.InviteUser(email)
 
 	if err != nil {
 		t.Error(err)
@@ -65,7 +65,7 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 		t.Errorf("expected count of 1 got count of %v", len(invites))
 	}
 
-	err = organisationClient.CancelUser(&email)
+	err = organisationClient.CancelUser(email)
 	if err != nil {
 		t.Error(err)
 	}
@@ -75,7 +75,7 @@ func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		id := "thing"
 		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisation{
-			OrgId: &id,
+			OrgId: id,
 		})
 
 		if req.RequestURI == "/account/orgs" {
