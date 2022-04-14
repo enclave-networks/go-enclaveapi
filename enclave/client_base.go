@@ -36,9 +36,9 @@ func Decode[T any](response *http.Response) *T {
 }
 
 func (client *ClientBase) createRequest(route string, method string, body io.Reader) (*http.Request, error) {
-	orgRoute := fmt.Sprintf("org/%s%s", *client.currentOrg.OrgId, route)
+	orgRoute := fmt.Sprintf("org/%s%s", client.currentOrg.OrgId, route)
 
-	reqUrl := getRequestUrl(client.baseURL, orgRoute)
+	reqUrl := getRequestUrl(*client.baseURL, orgRoute)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
 
 	if body != nil {
@@ -54,7 +54,7 @@ func (client *ClientBase) createRequest(route string, method string, body io.Rea
 	return req, nil
 }
 
-func getRequestUrl(baseUrl *url.URL, relative string) *url.URL {
+func getRequestUrl(baseUrl url.URL, relative string) *url.URL {
 	rel := &url.URL{Path: relative}
 	reqUrl := baseUrl.ResolveReference(rel)
 

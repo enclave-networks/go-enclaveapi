@@ -1,23 +1,23 @@
 package data
 
-type EnrolmentKeyStatus int
+type EnrolmentKeyStatus string
 
 const (
-	Disabled        EnrolmentKeyStatus = 0
-	Enabled         EnrolmentKeyStatus = 1
-	NoUsesRemaining EnrolmentKeyStatus = 2
+	Disabled        EnrolmentKeyStatus = "Disabled"
+	Enabled         EnrolmentKeyStatus = "Enabled"
+	NoUsesRemaining EnrolmentKeyStatus = "NoUsesRemaining"
 )
 
-type EnrolmentKeyType int
+type EnrolmentKeyType string
 
 const (
-	GeneralPurpose EnrolmentKeyType = 0
-	Ephemeral      EnrolmentKeyType = 1
+	GeneralPurpose EnrolmentKeyType = "GeneralPurpose"
+	Ephemeral      EnrolmentKeyType = "Ephemeral"
 )
 
-type EnrolmentKeyApprovalMode int
+type EnrolmentKeyApprovalMode string
 
 const (
-	Automatic EnrolmentKeyApprovalMode = 0
-	Manual    EnrolmentKeyApprovalMode = 1
+	Automatic EnrolmentKeyApprovalMode = "Automatic"
+	Manual    EnrolmentKeyApprovalMode = "Manual"
 )

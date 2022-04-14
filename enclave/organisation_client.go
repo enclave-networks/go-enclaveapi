@@ -35,7 +35,7 @@ func (client *OrganisationClient) Get() (*data.Organisation, error) {
 	return org, nil
 }
 
-func (client *OrganisationClient) Update(patch *data.OrganisationPatch) (*data.Organisation, error) {
+func (client *OrganisationClient) Update(patch data.OrganisationPatch) (*data.Organisation, error) {
 	requestBody, err := Encode(patch)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (client *OrganisationClient) Update(patch *data.OrganisationPatch) (*data.O
 	return org, nil
 }
 
-func (client *OrganisationClient) GetOrganisationUsers() ([]*data.OrganisationUser, error) {
+func (client *OrganisationClient) GetOrganisationUsers() (*[]data.OrganisationUser, error) {
 	req, err := client.base.createRequest("/users", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -81,11 +81,11 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]*data.OrganisationUs
 
 	orgUsers := Decode[data.OrganisationUsersTopLevel](response)
 
-	return orgUsers.Users, nil
+	return &orgUsers.Users, nil
 }
 
-func (client *OrganisationClient) RemoveUser(accountId *string) error {
-	route := fmt.Sprintf("/users/%s", *accountId)
+func (client *OrganisationClient) RemoveUser(accountId string) error {
+	route := fmt.Sprintf("/users/%s", accountId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
 	if err != nil {
 		return err
@@ -105,7 +105,7 @@ func (client *OrganisationClient) RemoveUser(accountId *string) error {
 	return nil
 }
 
-func (client *OrganisationClient) GetPendingInvites() ([]*data.OrganisationInvite, error) {
+func (client *OrganisationClient) GetPendingInvites() (*[]data.OrganisationInvite, error) {
 	req, err := client.base.createRequest("/invites", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -124,10 +124,10 @@ func (client *OrganisationClient) GetPendingInvites() ([]*data.OrganisationInvit
 
 	orgInvites := Decode[data.OrganisationPendingInvites](response)
 
-	return orgInvites.Invites, nil
+	return &orgInvites.Invites, nil
 }
 
-func (client *OrganisationClient) InviteUser(emailAddress *string) error {
+func (client *OrganisationClient) InviteUser(emailAddress string) error {
 	requestBody, err := Encode(data.OrganisationInvite{
 		EmailAddress: emailAddress,
 	})
@@ -154,7 +154,7 @@ func (client *OrganisationClient) InviteUser(emailAddress *string) error {
 	return nil
 }
 
-func (client *OrganisationClient) CancelUser(emailAddress *string) error {
+func (client *OrganisationClient) CancelUser(emailAddress string) error {
 	requestBody, err := Encode(data.OrganisationInvite{
 		EmailAddress: emailAddress,
 	})

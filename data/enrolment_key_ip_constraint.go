@@ -7,17 +7,17 @@ import (
 )
 
 type EnrolmentKeyIpConstraint struct {
-	Range       *string
-	Description *string
+	Range       string
+	Description string
 }
 
-func CreateEnrolmentKeyIpConstraintFromCidr(cidrNotation *string) (*EnrolmentKeyIpConstraint, error) {
-	if len(strings.Trim(*cidrNotation, " ")) == 0 {
+func CreateEnrolmentKeyIpConstraintFromCidr(cidrNotation string) (*EnrolmentKeyIpConstraint, error) {
+	if len(strings.Trim(cidrNotation, " ")) == 0 {
 		err := fmt.Errorf("empty string cidrNotation found, please input a correct notation")
 		return nil, err
 	}
 
-	if !strings.Contains(*cidrNotation, "/") {
+	if !strings.Contains(cidrNotation, "/") {
 		err := fmt.Errorf("incorrect CIDR format")
 		return nil, err
 	}
@@ -33,10 +33,8 @@ func CreateEnrolmentKeyIpConstraintFromIpAddr(ipAddress *net.IPAddr) (*Enrolment
 		return nil, err
 	}
 
-	ipString := ipAddress.IP.String()
-
 	return &EnrolmentKeyIpConstraint{
-		Range: &ipString,
+		Range: ipAddress.IP.String(),
 	}, nil
 }
 
@@ -51,9 +49,7 @@ func CreateEnrolmentKeyIpConstraintFromIpAddrRange(start *net.IPAddr, end *net.I
 		return nil, err
 	}
 
-	ipRange := fmt.Sprintf("%s - %s", start.IP.String(), end.IP.String())
-
 	return &EnrolmentKeyIpConstraint{
-		Range: &ipRange,
+		Range: fmt.Sprintf("%s - %s", start.IP.String(), end.IP.String()),
 	}, nil
 }

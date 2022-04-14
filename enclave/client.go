@@ -17,7 +17,7 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func CreateClient(token *string) *Client {
+func CreateClient(token string) *Client {
 	httpClient := &http.Client{Timeout: time.Minute}
 
 	baseUrl := &url.URL{
@@ -27,27 +27,27 @@ func CreateClient(token *string) *Client {
 
 	return &Client{
 		httpClient: httpClient,
-		token:      token,
+		token:      &token,
 		baseURL:    baseUrl,
 	}
 }
 
-func CreateClientWithUrl(token *string, baseUrl *string) (*Client, error) {
+func CreateClientWithUrl(token string, baseUrl string) (*Client, error) {
 	httpClient := &http.Client{Timeout: time.Minute}
 
-	parsedUrl, err := url.Parse(*baseUrl)
+	parsedUrl, err := url.Parse(baseUrl)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{
 		httpClient: httpClient,
-		token:      token,
+		token:      &token,
 		baseURL:    parsedUrl,
 	}, nil
 }
 
-func (client *Client) GetOrgs() ([]*data.AccountOrganisation, error) {
+func (client *Client) GetOrgs() (*[]data.AccountOrganisation, error) {
 	req, err := client.createEnclaveRequest("/account/orgs", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -62,15 +62,15 @@ func (client *Client) GetOrgs() ([]*data.AccountOrganisation, error) {
 	var orgTopLevel data.AccountOrganisationTopLevel
 	json.NewDecoder(response.Body).Decode(&orgTopLevel)
 
-	return orgTopLevel.Orgs, nil
+	return &orgTopLevel.Orgs, nil
 }
 
-func (client *Client) CreateOrganisationClient(org *data.AccountOrganisation) *OrganisationClient {
+func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *OrganisationClient {
 	base := &ClientBase{
 		baseURL:    client.baseURL,
 		token:      client.token,
 		httpClient: client.httpClient,
-		currentOrg: org,
+		currentOrg: &org,
 	}
 	return &OrganisationClient{
 		base: base,
@@ -84,7 +84,7 @@ func (client *Client) CreateOrganisationClient(org *data.AccountOrganisation) *O
 }
 
 func (client *Client) createEnclaveRequest(route string, method string, body io.Reader) (*http.Request, error) {
-	reqUrl := getRequestUrl(client.baseURL, route)
+	reqUrl := getRequestUrl(*client.baseURL, route)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
 
 	fmt.Println(reqUrl.String())
