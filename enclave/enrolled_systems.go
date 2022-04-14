@@ -42,30 +42,30 @@ func (client *EnrolledSystemsClient) GetSystems(
 	return systems.Items, nil
 }
 
-func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...*string) (*int, error) {
+func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...*string) (int, error) {
 	requestBody, err := Encode(systemIds)
 	if err != nil {
-		return nil, err
+		return -1, err
 	}
 
 	req, err := client.base.createRequest("/systems", http.MethodDelete, requestBody)
 	if err != nil {
-		return nil, err
+		return -1, err
 	}
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return -1, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return -1, err
 	}
 
 	count := Decode[int](response)
 
-	return count, nil
+	return *count, nil
 }
 
 func buildSystemsQuery(

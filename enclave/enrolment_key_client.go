@@ -36,169 +36,169 @@ func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDi
 	return enrolmentKeys.Items, nil
 }
 
-func (client *EnrolmentKeyClient) Create(create *data.EnrolmentKeyCreate) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Create(create *data.EnrolmentKeyCreate) (data.EnrolmentKey, error) {
 	if create == nil {
 		err := fmt.Errorf("create model is nil")
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	body, err := Encode(create)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	req, err := client.base.createRequest("/enrolment-keys", http.MethodPost, body)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Get(enrolmentKeyId *string) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Get(enrolmentKeyId *string) (data.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%s", *enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Enable(enrolmentKeyId *string) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Enable(enrolmentKeyId *string) (data.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%s/enable", *enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Disable(enrolmentKeyId *string) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Disable(enrolmentKeyId *string) (data.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%s/disable", *enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...*string) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...*string) (data.EnrolmentKey, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	body, err := Encode(enrolmentKeyIds)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	req, err := client.base.createRequest("/enrolment-keys/enable", http.MethodPut, body)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...*string) (*data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...*string) (data.EnrolmentKey, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	body, err := Encode(enrolmentKeyIds)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	req, err := client.base.createRequest("/enrolment-keys/disable", http.MethodPut, body)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return nil, err
+		return data.EnrolmentKey{}, err
 	}
 
 	enrolmentKey := Decode[data.EnrolmentKey](response)
 
-	return enrolmentKey, nil
+	return *enrolmentKey, nil
 }
 
 func buildEnrolmentKeyQuery(req *http.Request, searchTerm *string, includeDisabled *bool, sortOrder *int, pageNumber *int, perPage *int) {
