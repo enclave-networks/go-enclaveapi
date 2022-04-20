@@ -86,6 +86,34 @@ func (client *EnrolmentKeyClient) Get(enrolmentKeyId string) (data.EnrolmentKey,
 	return *enrolmentKey, nil
 }
 
+func (client *EnrolmentKeyClient) Update(enrolmentKeyId string, patch data.EnrolmentKeyPatch) (data.EnrolmentKey, error) {
+	body, err := Encode(patch)
+	if err != nil {
+		return data.EnrolmentKey{}, err
+	}
+
+	route := fmt.Sprintf("/enrolment-keys/%s", enrolmentKeyId)
+	req, err := client.base.createRequest(route, http.MethodPatch, body)
+	if err != nil {
+		return data.EnrolmentKey{}, err
+	}
+
+	response, err := client.base.httpClient.Do(req)
+	if err != nil {
+		return data.EnrolmentKey{}, err
+	}
+	defer response.Body.Close()
+
+	err = isSuccessStatusCode(response.StatusCode)
+	if err != nil {
+		return data.EnrolmentKey{}, err
+	}
+
+	enrolmentKey := Decode[data.EnrolmentKey](response)
+
+	return *enrolmentKey, nil
+}
+
 func (client *EnrolmentKeyClient) Enable(enrolmentKeyId string) (data.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%s/enable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
