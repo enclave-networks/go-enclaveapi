@@ -63,8 +63,8 @@ func (client *EnrolmentKeyClient) Create(create data.EnrolmentKeyCreate) (data.E
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Get(enrolmentKeyId string) (data.EnrolmentKey, error) {
-	route := fmt.Sprintf("/enrolment-keys/%s", enrolmentKeyId)
+func (client *EnrolmentKeyClient) Get(enrolmentKeyId int) (data.EnrolmentKey, error) {
+	route := fmt.Sprintf("/enrolment-keys/%v", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
 	if err != nil {
 		return data.EnrolmentKey{}, err
@@ -86,13 +86,13 @@ func (client *EnrolmentKeyClient) Get(enrolmentKeyId string) (data.EnrolmentKey,
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Update(enrolmentKeyId string, patch data.EnrolmentKeyPatch) (data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Update(enrolmentKeyId int, patch data.EnrolmentKeyPatch) (data.EnrolmentKey, error) {
 	body, err := Encode(patch)
 	if err != nil {
 		return data.EnrolmentKey{}, err
 	}
 
-	route := fmt.Sprintf("/enrolment-keys/%s", enrolmentKeyId)
+	route := fmt.Sprintf("/enrolment-keys/%v", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPatch, body)
 	if err != nil {
 		return data.EnrolmentKey{}, err
@@ -114,8 +114,8 @@ func (client *EnrolmentKeyClient) Update(enrolmentKeyId string, patch data.Enrol
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Enable(enrolmentKeyId string) (data.EnrolmentKey, error) {
-	route := fmt.Sprintf("/enrolment-keys/%s/enable", enrolmentKeyId)
+func (client *EnrolmentKeyClient) Enable(enrolmentKeyId int) (data.EnrolmentKey, error) {
+	route := fmt.Sprintf("/enrolment-keys/%v/enable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
 		return data.EnrolmentKey{}, err
@@ -137,8 +137,8 @@ func (client *EnrolmentKeyClient) Enable(enrolmentKeyId string) (data.EnrolmentK
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Disable(enrolmentKeyId string) (data.EnrolmentKey, error) {
-	route := fmt.Sprintf("/enrolment-keys/%s/disable", enrolmentKeyId)
+func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (data.EnrolmentKey, error) {
+	route := fmt.Sprintf("/enrolment-keys/%v/disable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
 		return data.EnrolmentKey{}, err
@@ -160,7 +160,7 @@ func (client *EnrolmentKeyClient) Disable(enrolmentKeyId string) (data.Enrolment
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...string) (data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...int) (data.EnrolmentKey, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
 		return data.EnrolmentKey{}, err
@@ -192,7 +192,7 @@ func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...string) (data.En
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...string) (data.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...int) (data.EnrolmentKey, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
 		return data.EnrolmentKey{}, err
