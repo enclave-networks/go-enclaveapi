@@ -3,7 +3,7 @@ package data
 import "time"
 
 type EnrolmentKey struct {
-	Id                           string
+	Id                           int
 	Created                      time.Time
 	LastUsed                     time.Time
 	Type                         EnrolmentKeyType
