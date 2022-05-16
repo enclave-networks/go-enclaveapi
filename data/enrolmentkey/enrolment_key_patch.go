@@ -1,9 +1,9 @@
-package data
+package enrolmentkey
 
-type EnrolmentKeyCreate struct {
-	Type                         EnrolmentKeyType           `json:"Type,omitempty"`
-	ApprovalMode                 EnrolmentKeyApprovalMode   `json:"ApprovalMode,omitempty"`
+type EnrolmentKeyPatch struct {
 	Description                  string                     `json:"Description,omitempty"`
+	IsEnabled                    bool                       `json:"IsEnabled,omitempty"`
+	ApprovalMode                 EnrolmentKeyApprovalMode   `json:"ApprovalMode,omitempty"`
 	UsesRemaining                int                        `json:"UsesRemaining,omitempty"`
 	IpConstraints                []EnrolmentKeyIpConstraint `json:"IpConstraints,omitempty"`
 	Tags                         []string                   `json:"Tags,omitempty"`

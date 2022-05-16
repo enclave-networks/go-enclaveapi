@@ -1,9 +1,13 @@
-package data
+package enrolmentkey
 
-import "time"
+import (
+	"time"
 
-type EnrolmentKey struct {
-	Id                           int
+	"github.com/enclave-networks/go-enclaveapi/data"
+)
+
+type EnrolmentKeySummary struct {
+	Id                           string
 	Created                      time.Time
 	LastUsed                     time.Time
 	Type                         EnrolmentKeyType
@@ -14,16 +18,14 @@ type EnrolmentKey struct {
 	UsesRemaining                int64
 	EnrolledCount                int64
 	UnapprovedCount              int64
-	Tags                         []TagReference
+	Tags                         []data.TagReference
 	DisconnectedRetentionMinutes int
-	IpConstraints                []EnrolmentKeyIpConstraint
-	Notes                        string
 }
 
-func (enrolmentKey *EnrolmentKey) Status() EnrolmentKeyStatus {
-	if enrolmentKey.UsesRemaining == 0 {
+func (enrolmentKeySummary *EnrolmentKeySummary) Status() EnrolmentKeyStatus {
+	if enrolmentKeySummary.UsesRemaining == 0 {
 		return NoUsesRemaining
-	} else if enrolmentKey.IsEnabled {
+	} else if enrolmentKeySummary.IsEnabled {
 		return Enabled
 	} else {
 		return Disabled

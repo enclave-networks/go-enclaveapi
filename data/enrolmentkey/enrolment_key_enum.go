@@ -1,4 +1,4 @@
-package data
+package enrolmentkey
 
 type EnrolmentKeyStatus string
 
@@ -20,4 +20,13 @@ type EnrolmentKeyApprovalMode string
 const (
 	Automatic EnrolmentKeyApprovalMode = "Automatic"
 	Manual    EnrolmentKeyApprovalMode = "Manual"
+)
+
+type EnrolmentKeySortOrder int
+
+const (
+	Description   EnrolmentKeySortOrder = 0
+	LastUsed      EnrolmentKeySortOrder = 1
+	ApprovalMode  EnrolmentKeySortOrder = 2
+	UsesRemaining EnrolmentKeySortOrder = 3
 )
