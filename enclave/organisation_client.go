@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/data/organisation"
 )
 
 type OrganisationClient struct {
@@ -13,56 +13,56 @@ type OrganisationClient struct {
 	EnrolmentKey *EnrolmentKeyClient
 }
 
-func (client *OrganisationClient) Get() (data.Organisation, error) {
+func (client *OrganisationClient) Get() (organisation.Organisation, error) {
 	req, err := client.base.createRequest("", http.MethodGet, nil)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 
-	org := Decode[data.Organisation](response)
+	org := Decode[organisation.Organisation](response)
 
 	return *org, nil
 }
 
-func (client *OrganisationClient) Update(patch data.OrganisationPatch) (data.Organisation, error) {
+func (client *OrganisationClient) Update(patch organisation.OrganisationPatch) (organisation.Organisation, error) {
 	requestBody, err := Encode(patch)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 
 	req, err := client.base.createRequest("", http.MethodPost, requestBody)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return data.Organisation{}, err
+		return organisation.Organisation{}, err
 	}
 
-	org := Decode[data.Organisation](response)
+	org := Decode[organisation.Organisation](response)
 
 	return *org, nil
 }
 
-func (client *OrganisationClient) GetOrganisationUsers() ([]data.OrganisationUser, error) {
+func (client *OrganisationClient) GetOrganisationUsers() ([]organisation.OrganisationUser, error) {
 	req, err := client.base.createRequest("/users", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -79,7 +79,7 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]data.OrganisationUse
 		return nil, err
 	}
 
-	orgUsers := Decode[data.OrganisationUsersTopLevel](response)
+	orgUsers := Decode[organisation.OrganisationUsersTopLevel](response)
 
 	return orgUsers.Users, nil
 }
@@ -105,7 +105,7 @@ func (client *OrganisationClient) RemoveUser(accountId string) error {
 	return nil
 }
 
-func (client *OrganisationClient) GetPendingInvites() ([]data.OrganisationInvite, error) {
+func (client *OrganisationClient) GetPendingInvites() ([]organisation.OrganisationInvite, error) {
 	req, err := client.base.createRequest("/invites", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -122,13 +122,13 @@ func (client *OrganisationClient) GetPendingInvites() ([]data.OrganisationInvite
 		return nil, err
 	}
 
-	orgInvites := Decode[data.OrganisationPendingInvites](response)
+	orgInvites := Decode[organisation.OrganisationPendingInvites](response)
 
 	return orgInvites.Invites, nil
 }
 
 func (client *OrganisationClient) InviteUser(emailAddress string) error {
-	requestBody, err := Encode(data.OrganisationInvite{
+	requestBody, err := Encode(organisation.OrganisationInvite{
 		EmailAddress: emailAddress,
 	})
 	if err != nil {
@@ -155,7 +155,7 @@ func (client *OrganisationClient) InviteUser(emailAddress string) error {
 }
 
 func (client *OrganisationClient) CancelUser(emailAddress string) error {
-	requestBody, err := Encode(data.OrganisationInvite{
+	requestBody, err := Encode(organisation.OrganisationInvite{
 		EmailAddress: emailAddress,
 	})
 	if err != nil {

@@ -1,7 +1,7 @@
 package policy
 
 type PolicyAcl struct {
-	Protocol    PolicyAclProtocol
-	Ports       string
-	Description string
+	Protocol    PolicyAclProtocol `json:"Protocol,omitempty"`
+	Ports       string            `json:"Ports,omitempty"`
+	Description string            `json:"Description,omitempty"`
 }

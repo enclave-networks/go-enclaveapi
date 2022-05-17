@@ -1,4 +1,4 @@
-package data
+package organisation
 
 type OrganisationInvite struct {
 	EmailAddress string

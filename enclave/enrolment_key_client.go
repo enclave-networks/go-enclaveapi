@@ -161,68 +161,68 @@ func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (enrolmentkey.Enro
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...int) (enrolmentkey.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...int) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	body, err := Encode(enrolmentKeyIds)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	req, err := client.base.createRequest("/enrolment-keys/enable", http.MethodPut, body)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
-	enrolmentKey := Decode[enrolmentkey.EnrolmentKey](response)
+	bulkResult := Decode[enrolmentkey.EnrolmentKeyBulkActionResult](response)
 
-	return *enrolmentKey, nil
+	return bulkResult.KeysModified, nil
 }
 
-func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...int) (enrolmentkey.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...int) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	body, err := Encode(enrolmentKeyIds)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	req, err := client.base.createRequest("/enrolment-keys/disable", http.MethodPut, body)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 	defer response.Body.Close()
 
 	err = isSuccessStatusCode(response.StatusCode)
 	if err != nil {
-		return enrolmentkey.EnrolmentKey{}, err
+		return 0, err
 	}
 
-	enrolmentKey := Decode[enrolmentkey.EnrolmentKey](response)
+	bulkResult := Decode[enrolmentkey.EnrolmentKeyBulkActionResult](response)
 
-	return *enrolmentKey, nil
+	return bulkResult.KeysModified, nil
 }
 
 func buildEnrolmentKeyQuery(req *http.Request, searchTerm *string, includeDisabled *bool, sortOrder *enrolmentkey.EnrolmentKeySortOrder, pageNumber *int, perPage *int) {

@@ -1,4 +1,4 @@
-package data
+package organisation
 
 type OrganisationPatch struct {
 	Name    string `json:"Name,omitempty"`
