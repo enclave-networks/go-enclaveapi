@@ -6,8 +6,12 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
+// An int backed Policy Id.
+type PolicyId int
+
+// Represents a single policy.
 type Policy struct {
-	Id           int
+	Id           PolicyId
 	Created      time.Time
 	Description  string
 	IsEnabled    bool

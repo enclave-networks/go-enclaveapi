@@ -6,8 +6,9 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
+// Represents a single Enclave Enrolment Key.
 type EnrolmentKeySummary struct {
-	Id                           string
+	Id                           EnrolmentKeyId
 	Created                      time.Time
 	LastUsed                     time.Time
 	Type                         EnrolmentKeyType

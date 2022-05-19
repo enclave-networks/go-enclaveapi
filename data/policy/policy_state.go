@@ -1,5 +1,6 @@
 package policy
 
+// Defines the possible states of policies.
 type PolicyState int
 
 const (

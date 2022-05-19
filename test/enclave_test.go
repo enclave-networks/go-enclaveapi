@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/data/organisation"
 	"github.com/enclave-networks/go-enclaveapi/enclave"
 )
 
@@ -73,9 +74,8 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 
 func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server, error) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		id := "thing"
 		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisation{
-			OrgId: id,
+			OrgId: organisation.OrganisationId("thing"),
 		})
 
 		if req.RequestURI == "/account/orgs" {

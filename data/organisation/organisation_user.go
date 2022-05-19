@@ -1,9 +1,14 @@
 package organisation
 
-import "time"
+import (
+	"time"
 
+	"github.com/enclave-networks/go-enclaveapi/data/account"
+)
+
+// Defines the properties of a user's membership of an organisation.
 type OrganisationUser struct {
-	Id           string
+	Id           account.AccountId
 	EmailAddress string
 	FirstName    string
 	LastName     string
@@ -11,6 +16,7 @@ type OrganisationUser struct {
 	Role         int
 }
 
+// Top Level model for organisation user requests.
 type OrganisationUsersTopLevel struct {
 	Users []OrganisationUser
 }

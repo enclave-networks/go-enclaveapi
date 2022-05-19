@@ -1,5 +1,6 @@
 package enrolmentkey
 
+// The status of an enrolment key.
 type EnrolmentKeyStatus string
 
 const (
@@ -8,6 +9,7 @@ const (
 	NoUsesRemaining EnrolmentKeyStatus = "NoUsesRemaining"
 )
 
+// Defines the types of Enrolment Keys.
 type EnrolmentKeyType string
 
 const (
@@ -15,6 +17,7 @@ const (
 	Ephemeral      EnrolmentKeyType = "Ephemeral"
 )
 
+// System Approval Mode.
 type EnrolmentKeyApprovalMode string
 
 const (
@@ -22,6 +25,7 @@ const (
 	Manual    EnrolmentKeyApprovalMode = "Manual"
 )
 
+// Enrolment Key Sort Order used when making an Enrolment Key request.
 type EnrolmentKeySortOrder int
 
 const (

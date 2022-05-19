@@ -1,16 +1,22 @@
-package data
+package enrolledSystem
 
-import "time"
+import (
+	"time"
 
+	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
+)
+
+// A basic model representing a single system.
 type EnrolledSystemSummary struct {
-	SystemId                     string
+	SystemId                     SystemId
 	Description                  string
 	Type                         int
 	State                        int
 	ConnectedAt                  time.Time
 	LastSeen                     time.Time
 	EnrolledAt                   time.Time
-	EnrolmentKeyId               int
+	EnrolmentKeyId               enrolmentkey.EnrolmentKeyId
 	EnrolmentKeyDescription      string
 	IsEnabled                    bool
 	ConnectedFrom                string
@@ -18,6 +24,6 @@ type EnrolledSystemSummary struct {
 	PlatformType                 string
 	OSVersion                    string
 	EnclaveVersion               string
-	Tags                         []TagReference
+	Tags                         []data.TagReference
 	DisconnectedRetentionMinutes int
 }

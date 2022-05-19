@@ -1,10 +1,13 @@
 package enclave
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/data/enrolledSystem"
+	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
 )
 
 type EnrolledSystemsClient struct {
@@ -12,13 +15,13 @@ type EnrolledSystemsClient struct {
 }
 
 func (client *EnrolledSystemsClient) GetSystems(
-	enrolmentKeyId *int,
+	enrolmentKeyId *enrolmentkey.EnrolmentKeyId,
 	searchTerm *string,
 	includeDisabled *bool,
 	sortOrder *int,
 	dnsName *string,
 	pageNumber *int,
-	perPage *int) ([]data.EnrolledSystemSummary, error) {
+	perPage *int) ([]enrolledSystem.EnrolledSystemSummary, error) {
 	req, err := client.base.createRequest("/systems", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -37,13 +40,18 @@ func (client *EnrolledSystemsClient) GetSystems(
 		return nil, err
 	}
 
-	systems := Decode[data.PaginatedResponse[data.EnrolledSystemSummary]](response)
+	systems := Decode[data.PaginatedResponse[enrolledSystem.EnrolledSystemSummary]](response)
 
 	return systems.Items, nil
 }
 
-func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...string) (int, error) {
-	requestBody, err := Encode(systemIds)
+func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledSystem.SystemId) (int, error) {
+	if systemIds == nil {
+		err := fmt.Errorf("no system Ids")
+		return 0, err
+	}
+
+	requestBody, err := Encode(enrolledSystem.EnrolledSystemBulkAction{SystemIds: systemIds})
 	if err != nil {
 		return -1, err
 	}
@@ -63,14 +71,14 @@ func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...string) (int, er
 		return -1, err
 	}
 
-	count := Decode[int](response)
+	result := Decode[enrolledSystem.EnrolledSystemBulkRevokedResult](response)
 
-	return *count, nil
+	return result.SystemsRevoked, nil
 }
 
 func buildSystemsQuery(
 	req *http.Request,
-	enrolmentKeyId *int,
+	enrolmentKeyId *enrolmentkey.EnrolmentKeyId,
 	searchTerm *string,
 	includeDisabled *bool,
 	sortOrder *int,

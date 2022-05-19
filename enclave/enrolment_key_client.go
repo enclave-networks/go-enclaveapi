@@ -64,7 +64,7 @@ func (client *EnrolmentKeyClient) Create(create enrolmentkey.EnrolmentKeyCreate)
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Get(enrolmentKeyId int) (enrolmentkey.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Get(enrolmentKeyId enrolmentkey.EnrolmentKeyId) (enrolmentkey.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%v", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
 	if err != nil {
@@ -87,7 +87,7 @@ func (client *EnrolmentKeyClient) Get(enrolmentKeyId int) (enrolmentkey.Enrolmen
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Update(enrolmentKeyId int, patch enrolmentkey.EnrolmentKeyPatch) (enrolmentkey.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Update(enrolmentKeyId enrolmentkey.EnrolmentKeyId, patch enrolmentkey.EnrolmentKeyPatch) (enrolmentkey.EnrolmentKey, error) {
 	body, err := Encode(patch)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
@@ -115,7 +115,7 @@ func (client *EnrolmentKeyClient) Update(enrolmentKeyId int, patch enrolmentkey.
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) Enable(enrolmentKeyId int) (enrolmentkey.EnrolmentKey, error) {
+func (client *EnrolmentKeyClient) Enable(enrolmentKeyId enrolmentkey.EnrolmentKeyId) (enrolmentkey.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%v/enable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
@@ -161,13 +161,13 @@ func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (enrolmentkey.Enro
 	return *enrolmentKey, nil
 }
 
-func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...int) (int, error) {
+func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...enrolmentkey.EnrolmentKeyId) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
 		return 0, err
 	}
 
-	body, err := Encode(enrolmentKeyIds)
+	body, err := Encode(enrolmentkey.EnrolmentKeyBulkAction{KeyIds: enrolmentKeyIds})
 	if err != nil {
 		return 0, err
 	}
@@ -193,13 +193,13 @@ func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...int) (int, error
 	return bulkResult.KeysModified, nil
 }
 
-func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...int) (int, error) {
+func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...enrolmentkey.EnrolmentKeyId) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
 		return 0, err
 	}
 
-	body, err := Encode(enrolmentKeyIds)
+	body, err := Encode(enrolmentkey.EnrolmentKeyBulkAction{KeyIds: enrolmentKeyIds})
 	if err != nil {
 		return 0, err
 	}

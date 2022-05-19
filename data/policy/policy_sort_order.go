@@ -1,5 +1,6 @@
 package policy
 
+// The sort order when making a Policy Request.
 type PolicySortOrder int
 
 const (

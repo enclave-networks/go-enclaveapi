@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Model for IP Address constraints.
 type EnrolmentKeyIpConstraint struct {
 	Range       string
 	Description string

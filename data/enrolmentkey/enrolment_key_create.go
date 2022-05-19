@@ -1,5 +1,6 @@
 package enrolmentkey
 
+// Data required to create a new enrolment key.
 type EnrolmentKeyCreate struct {
 	Type                         EnrolmentKeyType           `json:"Type,omitempty"`
 	ApprovalMode                 EnrolmentKeyApprovalMode   `json:"ApprovalMode,omitempty"`

@@ -2,8 +2,11 @@ package organisation
 
 import "time"
 
+type OrganisationId string
+
+// Organisation properties model.
 type Organisation struct {
-	Id                string
+	Id                OrganisationId
 	Created           time.Time
 	Name              string
 	Plan              int

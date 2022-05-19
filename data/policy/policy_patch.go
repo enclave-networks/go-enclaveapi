@@ -1,5 +1,6 @@
 package policy
 
+// Defines the modifiable properties of a policy.
 type PolicyPatch struct {
 	Description  string      `json:"Description,omitempty"`
 	IsEnabled    bool        `json:"IsEnabled,omitempty"`

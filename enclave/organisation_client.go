@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/enclave-networks/go-enclaveapi/data/account"
 	"github.com/enclave-networks/go-enclaveapi/data/organisation"
 )
 
@@ -84,7 +85,7 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]organisation.Organis
 	return orgUsers.Users, nil
 }
 
-func (client *OrganisationClient) RemoveUser(accountId string) error {
+func (client *OrganisationClient) RemoveUser(accountId account.AccountId) error {
 	route := fmt.Sprintf("/users/%s", accountId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
 	if err != nil {

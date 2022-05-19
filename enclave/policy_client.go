@@ -64,7 +64,7 @@ func (client *PolicyClient) Create(create policy.PolicyCreate) (policy.Policy, e
 	return *policy, nil
 }
 
-func (client *PolicyClient) Get(policyId int) (policy.Policy, error) {
+func (client *PolicyClient) Get(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v", policyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
 	if err != nil {
@@ -87,7 +87,7 @@ func (client *PolicyClient) Get(policyId int) (policy.Policy, error) {
 	return *policy, nil
 }
 
-func (client *PolicyClient) Update(policyId int, patch policy.PolicyPatch) (policy.Policy, error) {
+func (client *PolicyClient) Update(policyId policy.PolicyId, patch policy.PolicyPatch) (policy.Policy, error) {
 	body, err := Encode(patch)
 	if err != nil {
 		return policy.Policy{}, err
@@ -115,7 +115,7 @@ func (client *PolicyClient) Update(policyId int, patch policy.PolicyPatch) (poli
 	return *policy, nil
 }
 
-func (client *PolicyClient) Delete(policyId int) (policy.Policy, error) {
+func (client *PolicyClient) Delete(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/delete", policyId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
 	if err != nil {
@@ -138,7 +138,7 @@ func (client *PolicyClient) Delete(policyId int) (policy.Policy, error) {
 	return *policy, nil
 }
 
-func (client *PolicyClient) Enable(policyId int) (policy.Policy, error) {
+func (client *PolicyClient) Enable(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/enable", policyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
@@ -161,7 +161,7 @@ func (client *PolicyClient) Enable(policyId int) (policy.Policy, error) {
 	return *policy, nil
 }
 
-func (client *PolicyClient) Disable(policyId int) (policy.Policy, error) {
+func (client *PolicyClient) Disable(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/disable", policyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
 	if err != nil {
@@ -184,13 +184,13 @@ func (client *PolicyClient) Disable(policyId int) (policy.Policy, error) {
 	return *policy, nil
 }
 
-func (client *PolicyClient) BulkDelete(policyIds ...int) (int, error) {
+func (client *PolicyClient) BulkDelete(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err
 	}
 
-	body, err := Encode(policyIds)
+	body, err := Encode(policy.PolicyBulkAction{PolicyIds: policyIds})
 	if err != nil {
 		return 0, err
 	}
@@ -216,13 +216,13 @@ func (client *PolicyClient) BulkDelete(policyIds ...int) (int, error) {
 	return bulkResult.PoliciesDeleted, nil
 }
 
-func (client *PolicyClient) BulkEnable(policyIds ...int) (int, error) {
+func (client *PolicyClient) BulkEnable(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err
 	}
 
-	body, err := Encode(policyIds)
+	body, err := Encode(policy.PolicyBulkAction{PolicyIds: policyIds})
 	if err != nil {
 		return 0, err
 	}
@@ -248,13 +248,13 @@ func (client *PolicyClient) BulkEnable(policyIds ...int) (int, error) {
 	return bulkResult.PoliciesUpdated, nil
 }
 
-func (client *PolicyClient) BulkDisable(policyIds ...int) (int, error) {
+func (client *PolicyClient) BulkDisable(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err
 	}
 
-	body, err := Encode(policyIds)
+	body, err := Encode(policy.PolicyBulkAction{PolicyIds: policyIds})
 	if err != nil {
 		return 0, err
 	}

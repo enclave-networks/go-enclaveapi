@@ -1,5 +1,6 @@
 package policy
 
+// Defines the known protocols enforced in policy ACLs.
 type PolicyAclProtocol int
 
 const (

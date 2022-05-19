@@ -1,5 +1,6 @@
 package policy
 
+// Data required to create a new policy.
 type PolicyCreate struct {
 	Description  string      `json:"Description,omitempty"`
 	IsEnabled    bool        `json:"IsEnabled,omitempty"`

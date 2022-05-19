@@ -1,5 +1,6 @@
 package enrolmentkey
 
+// Defines the modifiable properties of an enrolment key.
 type EnrolmentKeyPatch struct {
 	Description                  string                     `json:"Description,omitempty"`
 	IsEnabled                    bool                       `json:"IsEnabled,omitempty"`
