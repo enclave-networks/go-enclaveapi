@@ -14,8 +14,8 @@ type OrganisationClient struct {
 	base         *ClientBase
 	Systems      *EnrolledSystemsClient
 	EnrolmentKey *EnrolmentKeyClient
-	DnsClient    *DnsClient
-	PolicyClient *PolicyClient
+	Dns          *DnsClient
+	Policy       *PolicyClient
 }
 
 // Get more detail on your current organisaiton.
