@@ -11,6 +11,7 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
+// Shared functionality that is needed by the other clients
 type ClientBase struct {
 	baseURL    *url.URL
 	token      *string
@@ -18,6 +19,7 @@ type ClientBase struct {
 	currentOrg *data.AccountOrganisation
 }
 
+// Encode data of type any into a JSON byte buffer
 func Encode(data any) (*bytes.Buffer, error) {
 	postBody, err := json.Marshal(data)
 	if err != nil {
@@ -29,12 +31,14 @@ func Encode(data any) (*bytes.Buffer, error) {
 	return requestBody, nil
 }
 
+// Decode an HTTP Response to Type of T
 func Decode[T any](response *http.Response) *T {
 	var toDecode = new(T)
 	json.NewDecoder(response.Body).Decode(toDecode)
 	return toDecode
 }
 
+// Helper to create a HTTP request with the correct prefix using the client
 func (client *ClientBase) createRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	orgRoute := fmt.Sprintf("org/%s%s", client.currentOrg.OrgId, route)
 
@@ -54,6 +58,7 @@ func (client *ClientBase) createRequest(route string, method string, body io.Rea
 	return req, nil
 }
 
+// Get a complete URL from a relative string
 func getRequestUrl(baseUrl url.URL, relative string) *url.URL {
 	rel := &url.URL{Path: relative}
 	reqUrl := baseUrl.ResolveReference(rel)
@@ -61,11 +66,13 @@ func getRequestUrl(baseUrl url.URL, relative string) *url.URL {
 	return reqUrl
 }
 
+// Set request headers this
 func setRequestHeader(token *string, request *http.Request) {
 	request.Header.Set("Authorization", "Bearer"+*token)
 	request.Header.Set("User-Agent", "go-enclaveapi")
 }
 
+// Check for a success status code (this logic is ported from the C# HttpClient)
 func isSuccessStatusCode(statusCode int) error {
 	isSuccess := statusCode >= 200 && statusCode <= 299
 	if !isSuccess {

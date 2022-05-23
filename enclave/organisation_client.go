@@ -8,12 +8,17 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data/organisation"
 )
 
+// Provides access to organisation level API calls and organisation related clients.
+// For more information please refer to our API docs at https://api.enclave.io/.
 type OrganisationClient struct {
 	base         *ClientBase
 	Systems      *EnrolledSystemsClient
 	EnrolmentKey *EnrolmentKeyClient
+	DnsClient    *DnsClient
+	PolicyClient *PolicyClient
 }
 
+// Get more detail on your current organisaiton.
 func (client *OrganisationClient) Get() (organisation.Organisation, error) {
 	req, err := client.base.createRequest("", http.MethodGet, nil)
 	if err != nil {
@@ -36,6 +41,7 @@ func (client *OrganisationClient) Get() (organisation.Organisation, error) {
 	return *org, nil
 }
 
+// Performs an update patch request.
 func (client *OrganisationClient) Update(patch organisation.OrganisationPatch) (organisation.Organisation, error) {
 	requestBody, err := Encode(patch)
 	if err != nil {
@@ -63,6 +69,7 @@ func (client *OrganisationClient) Update(patch organisation.OrganisationPatch) (
 	return *org, nil
 }
 
+// Gets the users that have access to the current organisaiton.
 func (client *OrganisationClient) GetOrganisationUsers() ([]organisation.OrganisationUser, error) {
 	req, err := client.base.createRequest("/users", http.MethodGet, nil)
 	if err != nil {
@@ -85,6 +92,7 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]organisation.Organis
 	return orgUsers.Users, nil
 }
 
+// Removes a user from the organisation.
 func (client *OrganisationClient) RemoveUser(accountId account.AccountId) error {
 	route := fmt.Sprintf("/users/%s", accountId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
@@ -106,6 +114,7 @@ func (client *OrganisationClient) RemoveUser(accountId account.AccountId) error 
 	return nil
 }
 
+// Get a list of invites that haven't been accepted.
 func (client *OrganisationClient) GetPendingInvites() ([]organisation.OrganisationInvite, error) {
 	req, err := client.base.createRequest("/invites", http.MethodGet, nil)
 	if err != nil {
@@ -128,6 +137,7 @@ func (client *OrganisationClient) GetPendingInvites() ([]organisation.Organisati
 	return orgInvites.Invites, nil
 }
 
+// Invite a user provided they haven't already been invited.
 func (client *OrganisationClient) InviteUser(emailAddress string) error {
 	requestBody, err := Encode(organisation.OrganisationInvite{
 		EmailAddress: emailAddress,
@@ -155,6 +165,7 @@ func (client *OrganisationClient) InviteUser(emailAddress string) error {
 	return nil
 }
 
+// Cancel and invite before it's accepted.
 func (client *OrganisationClient) CancelUser(emailAddress string) error {
 	requestBody, err := Encode(organisation.OrganisationInvite{
 		EmailAddress: emailAddress,

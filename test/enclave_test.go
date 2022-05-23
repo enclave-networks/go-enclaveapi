@@ -22,7 +22,7 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 
 	defer testServer.Close()
 
-	enclaveClient, err := enclave.CreateClientWithUrl(token, testServer.URL)
+	enclaveClient, err := enclave.NewWithUrl(token, testServer.URL)
 	if err != nil {
 		t.Error(err)
 	}

@@ -10,10 +10,12 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
 )
 
+// Provides operations to get, create, and manipulate Enrolled Systems.
 type EnrolledSystemsClient struct {
 	base *ClientBase
 }
 
+// Gets a paginated list of Systems which can be searched and iterated upon.
 func (client *EnrolledSystemsClient) GetSystems(
 	enrolmentKeyId *enrolmentkey.EnrolmentKeyId,
 	searchTerm *string,
@@ -45,6 +47,7 @@ func (client *EnrolledSystemsClient) GetSystems(
 	return systems.Items, nil
 }
 
+// Permanetly revoke multiple systems.
 func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledSystem.SystemId) (int, error) {
 	if systemIds == nil {
 		err := fmt.Errorf("no system Ids")

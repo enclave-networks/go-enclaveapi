@@ -9,10 +9,12 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data/dns"
 )
 
+// Provides operations to get, create, and manipulate Dns.
 type DnsClient struct {
 	base *ClientBase
 }
 
+// Gets a summary of DNS properties.
 func (client *DnsClient) GetPropertiesSummary() (dns.DnsSummary, error) {
 	req, err := client.base.createRequest("/dns", http.MethodGet, nil)
 	if err != nil {
@@ -35,13 +37,14 @@ func (client *DnsClient) GetPropertiesSummary() (dns.DnsSummary, error) {
 	return *dnsSummary, nil
 }
 
+// Gets a paginated list of DNS zones.
 func (client *DnsClient) GetZones(pageNumber *int, perPage *int) ([]dns.DnsZoneSummary, error) {
 	req, err := client.base.createRequest("/dns/zones", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	buildDnsQuery(req, pageNumber, perPage)
+	buildDnsQuery(req, nil, nil, pageNumber, perPage)
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
@@ -59,6 +62,7 @@ func (client *DnsClient) GetZones(pageNumber *int, perPage *int) ([]dns.DnsZoneS
 	return dnsZones.Items, nil
 }
 
+// Creates a DNS Zone using a "DnsZoneCreate" struct.
 func (client *DnsClient) CreateZone(create dns.DnsZoneCreate) (dns.DnsZone, error) {
 	body, err := Encode(create)
 	if err != nil {
@@ -86,6 +90,7 @@ func (client *DnsClient) CreateZone(create dns.DnsZoneCreate) (dns.DnsZone, erro
 	return *dnsZone, nil
 }
 
+// Gets the details of a specific DNS Zone.
 func (client *DnsClient) GetZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error) {
 	route := fmt.Sprintf("/dns/zones/%v", dnsZoneId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
@@ -109,6 +114,7 @@ func (client *DnsClient) GetZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error) {
 	return *dnsZone, nil
 }
 
+// Perform an update patch request.
 func (client *DnsClient) UpdateZone(dnsZoneId dns.DnsZoneId, patch dns.DnsZonePatch) (dns.DnsZone, error) {
 	body, err := Encode(patch)
 	if err != nil {
@@ -137,6 +143,7 @@ func (client *DnsClient) UpdateZone(dnsZoneId dns.DnsZoneId, patch dns.DnsZonePa
 	return *dnsZone, nil
 }
 
+// Delete a DNS Zone and it's associated record. This is irriversable.
 func (client *DnsClient) DeleteZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error) {
 	route := fmt.Sprintf("/dns/zones/%v", dnsZoneId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
@@ -160,14 +167,14 @@ func (client *DnsClient) DeleteZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error
 	return *dnsZone, nil
 }
 
-//TODO: Need to add more values here
-func (client *DnsClient) GetRecords(pageNumber *int, perPage *int) ([]dns.DnsRecordSummary, error) {
+// Gets a paginated list of DNS records.
+func (client *DnsClient) GetRecords(dnsZoneId *dns.DnsZoneId, hostName *string, pageNumber *int, perPage *int) ([]dns.DnsRecordSummary, error) {
 	req, err := client.base.createRequest("/dns/records", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	buildDnsQuery(req, pageNumber, perPage)
+	buildDnsQuery(req, dnsZoneId, hostName, pageNumber, perPage)
 
 	response, err := client.base.httpClient.Do(req)
 	if err != nil {
@@ -185,6 +192,7 @@ func (client *DnsClient) GetRecords(pageNumber *int, perPage *int) ([]dns.DnsRec
 	return dnsRecords.Items, nil
 }
 
+// Create a DNS Record using a "DnsRecordCreate"struct.
 func (client *DnsClient) CreateRecord(create dns.DnsRecordCreate) (dns.DnsRecord, error) {
 	// If we haven't set a type set it to ENCLAVE as this is the default
 	if len(create.Type) == 0 {
@@ -217,6 +225,7 @@ func (client *DnsClient) CreateRecord(create dns.DnsRecordCreate) (dns.DnsRecord
 	return *dnsRecord, nil
 }
 
+// Get a detailed DNS Record.
 func (client *DnsClient) GetRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecord, error) {
 	route := fmt.Sprintf("/dns/records/%v", dnsRecordId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
@@ -240,6 +249,7 @@ func (client *DnsClient) GetRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecord, 
 	return *dnsRecord, nil
 }
 
+// Performs an update patch request
 func (client *DnsClient) UpdateRecord(dnsRecordId dns.DnsRecordId, patch dns.DnsRecordPatch) (dns.DnsRecord, error) {
 	body, err := Encode(patch)
 	if err != nil {
@@ -268,6 +278,7 @@ func (client *DnsClient) UpdateRecord(dnsRecordId dns.DnsRecordId, patch dns.Dns
 	return *dnsRecord, nil
 }
 
+// Delete a single DNS Record.
 func (client *DnsClient) DeleteRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecord, error) {
 	route := fmt.Sprintf("/dns/records/%v", dnsRecordId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
@@ -291,7 +302,8 @@ func (client *DnsClient) DeleteRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecor
 	return *dnsRecord, nil
 }
 
-func (client *DnsClient) BulkDeleteRecord(recordIds ...dns.DnsRecordId) (int, error) {
+// Delete multiple DNS Records.
+func (client *DnsClient) DeleteRecords(recordIds ...dns.DnsRecordId) (int, error) {
 	if recordIds == nil {
 		err := fmt.Errorf("no record Ids")
 		return 0, err
@@ -322,8 +334,16 @@ func (client *DnsClient) BulkDeleteRecord(recordIds ...dns.DnsRecordId) (int, er
 	return result.DnsRecordsDeleted, nil
 }
 
-func buildDnsQuery(req *http.Request, pageNumber *int, perPage *int) {
+func buildDnsQuery(req *http.Request, dnsZoneId *dns.DnsZoneId, hostName *string, pageNumber *int, perPage *int) {
 	query := req.URL.Query()
+
+	if dnsZoneId != nil {
+		query.Add("zoneId", strconv.FormatInt(int64(*dnsZoneId), 10))
+	}
+
+	if hostName != nil {
+		query.Add("hostname", *hostName)
+	}
 
 	if pageNumber != nil {
 		query.Add("page", strconv.FormatInt(int64(*pageNumber), 10))

@@ -9,10 +9,12 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data/policy"
 )
 
+// Provides operations to get, create, and manipulate Policies.
 type PolicyClient struct {
 	base *ClientBase
 }
 
+// Gets a paginated list of Policies which can be searched and iterated upon.
 func (client *PolicyClient) GetPolicies(searchTerm *string, includeDisabled *bool, sortOrder *policy.PolicySortOrder, pageNumber *int, perPage *int) ([]policy.Policy, error) {
 	req, err := client.base.createRequest("/policies", http.MethodGet, nil)
 	if err != nil {
@@ -37,6 +39,7 @@ func (client *PolicyClient) GetPolicies(searchTerm *string, includeDisabled *boo
 	return policies.Items, nil
 }
 
+// Creates a Policy using a "PolicyCreate" Struct.
 func (client *PolicyClient) Create(create policy.PolicyCreate) (policy.Policy, error) {
 	body, err := Encode(create)
 	if err != nil {
@@ -64,6 +67,7 @@ func (client *PolicyClient) Create(create policy.PolicyCreate) (policy.Policy, e
 	return *policy, nil
 }
 
+// Get a specific Policy.
 func (client *PolicyClient) Get(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v", policyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
@@ -87,6 +91,7 @@ func (client *PolicyClient) Get(policyId policy.PolicyId) (policy.Policy, error)
 	return *policy, nil
 }
 
+// Starts an update patch request.
 func (client *PolicyClient) Update(policyId policy.PolicyId, patch policy.PolicyPatch) (policy.Policy, error) {
 	body, err := Encode(patch)
 	if err != nil {
@@ -115,6 +120,7 @@ func (client *PolicyClient) Update(policyId policy.PolicyId, patch policy.Policy
 	return *policy, nil
 }
 
+// Delete a Policy.
 func (client *PolicyClient) Delete(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/delete", policyId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
@@ -138,6 +144,7 @@ func (client *PolicyClient) Delete(policyId policy.PolicyId) (policy.Policy, err
 	return *policy, nil
 }
 
+// Enable a Policy.
 func (client *PolicyClient) Enable(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/enable", policyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
@@ -161,6 +168,7 @@ func (client *PolicyClient) Enable(policyId policy.PolicyId) (policy.Policy, err
 	return *policy, nil
 }
 
+// Disable a Policy.
 func (client *PolicyClient) Disable(policyId policy.PolicyId) (policy.Policy, error) {
 	route := fmt.Sprintf("/policies/%v/disable", policyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
@@ -184,7 +192,8 @@ func (client *PolicyClient) Disable(policyId policy.PolicyId) (policy.Policy, er
 	return *policy, nil
 }
 
-func (client *PolicyClient) BulkDelete(policyIds ...policy.PolicyId) (int, error) {
+// Delete multiple Policies.
+func (client *PolicyClient) DeletePolicies(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err
@@ -216,7 +225,8 @@ func (client *PolicyClient) BulkDelete(policyIds ...policy.PolicyId) (int, error
 	return bulkResult.PoliciesDeleted, nil
 }
 
-func (client *PolicyClient) BulkEnable(policyIds ...policy.PolicyId) (int, error) {
+// Enable multiple Policies.
+func (client *PolicyClient) EnalbePolicies(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err
@@ -248,7 +258,8 @@ func (client *PolicyClient) BulkEnable(policyIds ...policy.PolicyId) (int, error
 	return bulkResult.PoliciesUpdated, nil
 }
 
-func (client *PolicyClient) BulkDisable(policyIds ...policy.PolicyId) (int, error) {
+// Disable multiple Policies.
+func (client *PolicyClient) DisablePolicies(policyIds ...policy.PolicyId) (int, error) {
 	if policyIds == nil {
 		err := fmt.Errorf("no policy Ids")
 		return 0, err

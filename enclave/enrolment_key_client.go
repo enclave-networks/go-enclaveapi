@@ -9,10 +9,12 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
 )
 
+// Provides operations to get, create, and manipulate Enrolment Keys.
 type EnrolmentKeyClient struct {
 	base *ClientBase
 }
 
+// Gets a paginated list of Enrolment Keys which can be searched and interated upon.
 func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDisabled *bool, sortOrder *enrolmentkey.EnrolmentKeySortOrder, pageNumber *int, perPage *int) ([]enrolmentkey.EnrolmentKeySummary, error) {
 	req, err := client.base.createRequest("/enrolment-keys", http.MethodGet, nil)
 	if err != nil {
@@ -37,6 +39,7 @@ func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDi
 	return enrolmentKeys.Items, nil
 }
 
+// Creates an Enrolment Key using a <see cref="EnrolmentKeyCreate"/> Model.
 func (client *EnrolmentKeyClient) Create(create enrolmentkey.EnrolmentKeyCreate) (enrolmentkey.EnrolmentKey, error) {
 	body, err := Encode(create)
 	if err != nil {
@@ -64,6 +67,7 @@ func (client *EnrolmentKeyClient) Create(create enrolmentkey.EnrolmentKeyCreate)
 	return *enrolmentKey, nil
 }
 
+// Gets a detailed Enrolment Key model.
 func (client *EnrolmentKeyClient) Get(enrolmentKeyId enrolmentkey.EnrolmentKeyId) (enrolmentkey.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%v", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodGet, nil)
@@ -87,6 +91,7 @@ func (client *EnrolmentKeyClient) Get(enrolmentKeyId enrolmentkey.EnrolmentKeyId
 	return *enrolmentKey, nil
 }
 
+// Starts an update patch request.
 func (client *EnrolmentKeyClient) Update(enrolmentKeyId enrolmentkey.EnrolmentKeyId, patch enrolmentkey.EnrolmentKeyPatch) (enrolmentkey.EnrolmentKey, error) {
 	body, err := Encode(patch)
 	if err != nil {
@@ -115,6 +120,7 @@ func (client *EnrolmentKeyClient) Update(enrolmentKeyId enrolmentkey.EnrolmentKe
 	return *enrolmentKey, nil
 }
 
+// Enable an Enrolment Key.
 func (client *EnrolmentKeyClient) Enable(enrolmentKeyId enrolmentkey.EnrolmentKeyId) (enrolmentkey.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%v/enable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
@@ -138,6 +144,7 @@ func (client *EnrolmentKeyClient) Enable(enrolmentKeyId enrolmentkey.EnrolmentKe
 	return *enrolmentKey, nil
 }
 
+// Disable an Enrolment Key.
 func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (enrolmentkey.EnrolmentKey, error) {
 	route := fmt.Sprintf("/enrolment-keys/%v/disable", enrolmentKeyId)
 	req, err := client.base.createRequest(route, http.MethodPut, nil)
@@ -161,6 +168,7 @@ func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (enrolmentkey.Enro
 	return *enrolmentKey, nil
 }
 
+// Bulk enable mutliple Enrolment Keys.
 func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...enrolmentkey.EnrolmentKeyId) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")
@@ -193,6 +201,7 @@ func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...enrolmentkey.Enr
 	return bulkResult.KeysModified, nil
 }
 
+// Bulk disable mutliple Enrolment Keys.
 func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...enrolmentkey.EnrolmentKeyId) (int, error) {
 	if enrolmentKeyIds == nil {
 		err := fmt.Errorf("no enrolmentKey Ids")

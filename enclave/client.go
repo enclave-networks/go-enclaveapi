@@ -1,7 +1,6 @@
 package enclave
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,12 +10,14 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/data"
 )
 
+// The standard client for using the enclave API from here you can create associated clients
 type Client struct {
 	baseURL    *url.URL
 	token      *string
 	httpClient *http.Client
 }
 
+// Create a new client with a provided token
 func New(token string) *Client {
 	httpClient := &http.Client{Timeout: time.Minute}
 
@@ -32,7 +33,8 @@ func New(token string) *Client {
 	}
 }
 
-func CreateClientWithUrl(token string, baseUrl string) (*Client, error) {
+// Create the client with the specified base url (this is primarly for testing)
+func NewWithUrl(token string, baseUrl string) (*Client, error) {
 	httpClient := &http.Client{Timeout: time.Minute}
 
 	parsedUrl, err := url.Parse(baseUrl)
@@ -47,6 +49,7 @@ func CreateClientWithUrl(token string, baseUrl string) (*Client, error) {
 	}, nil
 }
 
+// Get all orgs associated to the current token
 func (client *Client) GetOrgs() ([]data.AccountOrganisation, error) {
 	req, err := client.createEnclaveRequest("/account/orgs", http.MethodGet, nil)
 	if err != nil {
@@ -59,12 +62,12 @@ func (client *Client) GetOrgs() ([]data.AccountOrganisation, error) {
 	}
 	defer response.Body.Close()
 
-	var orgTopLevel data.AccountOrganisationTopLevel
-	json.NewDecoder(response.Body).Decode(&orgTopLevel)
+	orgTopLevel := Decode[data.AccountOrganisationTopLevel](response)
 
 	return orgTopLevel.Orgs, nil
 }
 
+// Create the base organisation client from here you can do all the expected requests as described in our docs https://api.enclave.io
 func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *OrganisationClient {
 	base := &ClientBase{
 		baseURL:    client.baseURL,
@@ -80,9 +83,16 @@ func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *Or
 		EnrolmentKey: &EnrolmentKeyClient{
 			base: base,
 		},
+		DnsClient: &DnsClient{
+			base: base,
+		},
+		PolicyClient: &PolicyClient{
+			base: base,
+		},
 	}
 }
 
+// create an enclave request that doesn't include the org prefix
 func (client *Client) createEnclaveRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	reqUrl := getRequestUrl(*client.baseURL, route)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
