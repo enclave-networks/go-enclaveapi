@@ -122,7 +122,7 @@ func (client *PolicyClient) Update(policyId policy.PolicyId, patch policy.Policy
 
 // Delete a Policy.
 func (client *PolicyClient) Delete(policyId policy.PolicyId) (policy.Policy, error) {
-	route := fmt.Sprintf("/policies/%v/delete", policyId)
+	route := fmt.Sprintf("/policies/%v", policyId)
 	req, err := client.base.createRequest(route, http.MethodDelete, nil)
 	if err != nil {
 		return policy.Policy{}, err
