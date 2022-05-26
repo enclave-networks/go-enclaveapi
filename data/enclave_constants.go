@@ -1,4 +1,4 @@
 package data
 
-const BaseUrl = "localhost:8081"
-const Scheme = "http"
+const BaseUrl = "api.enclave.io"
+const Scheme = "https"
