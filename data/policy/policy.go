@@ -17,7 +17,7 @@ type Policy struct {
 	IsEnabled    bool
 	State        PolicyState
 	SenderTags   []data.TagReference
-	RecieverTags []data.TagReference
+	ReceiverTags []data.TagReference
 	Acls         []PolicyAcl
 	Notes        string
 }
