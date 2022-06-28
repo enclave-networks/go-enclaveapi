@@ -89,7 +89,7 @@ func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *Or
 		Policy: &PolicyClient{
 			base: base,
 		},
-		TrustRequirementsClient: &TrustRequirementsClient{
+		TrustRequirement: &TrustRequirementsClient{
 			base: base,
 		},
 	}
