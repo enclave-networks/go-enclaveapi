@@ -104,6 +104,30 @@ func (client *TrustRequirementsClient) DeleteTrustRequirements(trustRequirementI
 	return bulkResult.RequirementsDeleted, nil
 }
 
+// Get a specific Trust Requirement.
+func (client *TrustRequirementsClient) Get(trustRequirementId trustrequirement.TrustRequirementId) (trustrequirement.TrustRequirement, error) {
+	route := fmt.Sprintf("/trust-requirements/%v", trustRequirementId)
+	req, err := client.base.createRequest(route, http.MethodGet, nil)
+	if err != nil {
+		return trustrequirement.TrustRequirement{}, err
+	}
+
+	response, err := client.base.httpClient.Do(req)
+	if err != nil {
+		return trustrequirement.TrustRequirement{}, err
+	}
+	defer response.Body.Close()
+
+	err = isSuccessStatusCode(response.StatusCode)
+	if err != nil {
+		return trustrequirement.TrustRequirement{}, err
+	}
+
+	trustRequirement := Decode[trustrequirement.TrustRequirement](response)
+
+	return *trustRequirement, nil
+}
+
 // Starts an update patch request.
 func (client *TrustRequirementsClient) Update(requirementId trustrequirement.TrustRequirementId, patch trustrequirement.TrustRequirementPatch) (trustrequirement.TrustRequirement, error) {
 	body, err := Encode(patch)
