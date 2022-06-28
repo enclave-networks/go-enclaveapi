@@ -15,7 +15,7 @@ var token string = "mytoken"
 
 // https://stackoverflow.com/questions/47436263/how-to-mock-http-client-that-returns-a-json-response
 func Test_when_calling_organisation_get_returns_values(t *testing.T) {
-	testServer, err := createTestServer(200, nil)
+	testServer, err := createTestServer(nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -44,7 +44,33 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 }
 
 func Test_when_calling_organisation_returns_values(t *testing.T) {
-	testServer, err := createTestServer(200, nil)
+	email := "test@test.com"
+
+	testServer, err := createTestServer(
+		&HttpMatch{
+			Uri:      "/org/orgId/invites",
+			Method:   http.MethodPost,
+			Response: 200,
+		},
+		&HttpMatch{
+			Uri:      "/org/orgId/invites",
+			Method:   http.MethodDelete,
+			Response: 200,
+		},
+		&HttpMatch{
+			Uri:      "/org/orgId/invites",
+			Method:   http.MethodGet,
+			Response: 200,
+			Body: &organisation.OrganisationPendingInvites{
+				Invites: []organisation.OrganisationInvite{
+					{
+						EmailAddress: email,
+					},
+				},
+			},
+		},
+	)
+
 	if err != nil {
 		t.Error(err)
 	}
@@ -60,7 +86,6 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 
 	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
 
-	email := "tom.soulard+1337@enclave.io"
 	err = organisationClient.InviteUser(email)
 
 	if err != nil {
@@ -82,18 +107,18 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 	}
 }
 
-func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server, error) {
+func createTestServer(httpMatches ...*HttpMatch) (*httptest.Server, error) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisationTopLevel{
 			Orgs: []data.AccountOrganisation{
 				{
-					OrgId: organisation.OrganisationId("thing"),
+					OrgId: organisation.OrganisationId("orgId"),
 				},
 			},
 		})
 
 		if req.RequestURI == "/account/orgs" {
-			res.WriteHeader(expected)
+			res.WriteHeader(200)
 			res.Write(accountOrganisationBody)
 			return
 		}
@@ -103,10 +128,10 @@ func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server
 		}
 
 		for _, httpMatch := range httpMatches {
-			if req.RequestURI == httpMatch.Uri {
+			if req.RequestURI == httpMatch.Uri && req.Method == httpMatch.Method {
 				body, _ := json.Marshal(httpMatch.Body)
 
-				res.WriteHeader(expected)
+				res.WriteHeader(httpMatch.Response)
 				res.Write(body)
 				return
 			}
@@ -117,6 +142,8 @@ func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server
 }
 
 type HttpMatch struct {
-	Body any
-	Uri  string
+	Body     any
+	Uri      string
+	Response int
+	Method   string
 }
