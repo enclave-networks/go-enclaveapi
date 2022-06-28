@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/enclave-networks/go-enclaveapi/data"
-	"github.com/enclave-networks/go-enclaveapi/data/enrolledSystem"
+	"github.com/enclave-networks/go-enclaveapi/data/enrolledsystem"
 	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
 )
 
@@ -23,7 +23,7 @@ func (client *EnrolledSystemsClient) GetSystems(
 	sortOrder *int,
 	dnsName *string,
 	pageNumber *int,
-	perPage *int) ([]enrolledSystem.EnrolledSystemSummary, error) {
+	perPage *int) (*data.PaginatedResponse[enrolledsystem.EnrolledSystemSummary], error) {
 	req, err := client.base.createRequest("/systems", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -42,19 +42,19 @@ func (client *EnrolledSystemsClient) GetSystems(
 		return nil, err
 	}
 
-	systems := Decode[data.PaginatedResponse[enrolledSystem.EnrolledSystemSummary]](response)
+	systems := Decode[data.PaginatedResponse[enrolledsystem.EnrolledSystemSummary]](response)
 
-	return systems.Items, nil
+	return systems, nil
 }
 
 // Permanetly revoke multiple systems.
-func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledSystem.SystemId) (int, error) {
+func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledsystem.SystemId) (int, error) {
 	if systemIds == nil {
 		err := fmt.Errorf("no system Ids")
 		return 0, err
 	}
 
-	requestBody, err := Encode(enrolledSystem.EnrolledSystemBulkAction{SystemIds: systemIds})
+	requestBody, err := Encode(enrolledsystem.EnrolledSystemBulkAction{SystemIds: systemIds})
 	if err != nil {
 		return -1, err
 	}
@@ -74,7 +74,7 @@ func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledSystem.S
 		return -1, err
 	}
 
-	result := Decode[enrolledSystem.EnrolledSystemBulkRevokedResult](response)
+	result := Decode[enrolledsystem.EnrolledSystemBulkRevokedResult](response)
 
 	return result.SystemsRevoked, nil
 }

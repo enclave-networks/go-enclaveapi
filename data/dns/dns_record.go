@@ -2,7 +2,7 @@ package dns
 
 import (
 	"github.com/enclave-networks/go-enclaveapi/data"
-	"github.com/enclave-networks/go-enclaveapi/data/enrolledSystem"
+	"github.com/enclave-networks/go-enclaveapi/data/enrolledsystem"
 )
 
 // An int backed Dns Record Id.
@@ -17,5 +17,5 @@ type DnsRecord struct {
 	ZoneName string
 	Fqdn     string
 	Tags     []data.TagReference
-	Systems  []enrolledSystem.SystemReference
+	Systems  []enrolledsystem.SystemReference
 }

@@ -38,7 +38,7 @@ func (client *DnsClient) GetPropertiesSummary() (dns.DnsSummary, error) {
 }
 
 // Gets a paginated list of DNS zones.
-func (client *DnsClient) GetZones(pageNumber *int, perPage *int) ([]dns.DnsZoneSummary, error) {
+func (client *DnsClient) GetZones(pageNumber *int, perPage *int) (*data.PaginatedResponse[dns.DnsZoneSummary], error) {
 	req, err := client.base.createRequest("/dns/zones", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (client *DnsClient) GetZones(pageNumber *int, perPage *int) ([]dns.DnsZoneS
 
 	dnsZones := Decode[data.PaginatedResponse[dns.DnsZoneSummary]](response)
 
-	return dnsZones.Items, nil
+	return dnsZones, nil
 }
 
 // Creates a DNS Zone using a "DnsZoneCreate" struct.
@@ -168,7 +168,11 @@ func (client *DnsClient) DeleteZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error
 }
 
 // Gets a paginated list of DNS records.
-func (client *DnsClient) GetRecords(dnsZoneId *dns.DnsZoneId, hostName *string, pageNumber *int, perPage *int) ([]dns.DnsRecordSummary, error) {
+func (client *DnsClient) GetRecords(
+	dnsZoneId *dns.DnsZoneId,
+	hostName *string,
+	pageNumber *int,
+	perPage *int) (*data.PaginatedResponse[dns.DnsRecordSummary], error) {
 	req, err := client.base.createRequest("/dns/records", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -189,7 +193,7 @@ func (client *DnsClient) GetRecords(dnsZoneId *dns.DnsZoneId, hostName *string, 
 
 	dnsRecords := Decode[data.PaginatedResponse[dns.DnsRecordSummary]](response)
 
-	return dnsRecords.Items, nil
+	return dnsRecords, nil
 }
 
 // Create a DNS Record using a "DnsRecordCreate"struct.

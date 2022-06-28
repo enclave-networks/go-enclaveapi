@@ -15,7 +15,12 @@ type EnrolmentKeyClient struct {
 }
 
 // Gets a paginated list of Enrolment Keys which can be searched and interated upon.
-func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDisabled *bool, sortOrder *enrolmentkey.EnrolmentKeySortOrder, pageNumber *int, perPage *int) ([]enrolmentkey.EnrolmentKeySummary, error) {
+func (client *EnrolmentKeyClient) GetEnrolmentKeys(
+	searchTerm *string,
+	includeDisabled *bool,
+	sortOrder *enrolmentkey.EnrolmentKeySortOrder,
+	pageNumber *int,
+	perPage *int) (*data.PaginatedResponse[enrolmentkey.EnrolmentKeySummary], error) {
 	req, err := client.base.createRequest("/enrolment-keys", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -36,7 +41,7 @@ func (client *EnrolmentKeyClient) GetEnrolmentKeys(searchTerm *string, includeDi
 
 	enrolmentKeys := Decode[data.PaginatedResponse[enrolmentkey.EnrolmentKeySummary]](response)
 
-	return enrolmentKeys.Items, nil
+	return enrolmentKeys, nil
 }
 
 // Creates an Enrolment Key using a <see cref="EnrolmentKeyCreate"/> Model.

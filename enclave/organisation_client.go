@@ -11,11 +11,12 @@ import (
 // Provides access to organisation level API calls and organisation related clients.
 // For more information please refer to our API docs at https://api.enclave.io/.
 type OrganisationClient struct {
-	base         *ClientBase
-	Systems      *EnrolledSystemsClient
-	EnrolmentKey *EnrolmentKeyClient
-	Dns          *DnsClient
-	Policy       *PolicyClient
+	base                    *ClientBase
+	Systems                 *EnrolledSystemsClient
+	EnrolmentKey            *EnrolmentKeyClient
+	Dns                     *DnsClient
+	Policy                  *PolicyClient
+	TrustRequirementsClient *TrustRequirementsClient
 }
 
 // Get more detail on your current organisaiton.

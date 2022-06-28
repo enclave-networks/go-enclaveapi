@@ -15,7 +15,11 @@ type PolicyClient struct {
 }
 
 // Gets a paginated list of Policies which can be searched and iterated upon.
-func (client *PolicyClient) GetPolicies(searchTerm *string, includeDisabled *bool, sortOrder *policy.PolicySortOrder, pageNumber *int, perPage *int) ([]policy.Policy, error) {
+func (client *PolicyClient) GetPolicies(searchTerm *string,
+	includeDisabled *bool,
+	sortOrder *policy.PolicySortOrder,
+	pageNumber *int,
+	perPage *int) (*data.PaginatedResponse[policy.Policy], error) {
 	req, err := client.base.createRequest("/policies", http.MethodGet, nil)
 	if err != nil {
 		return nil, err
@@ -36,7 +40,7 @@ func (client *PolicyClient) GetPolicies(searchTerm *string, includeDisabled *boo
 
 	policies := Decode[data.PaginatedResponse[policy.Policy]](response)
 
-	return policies.Items, nil
+	return policies, nil
 }
 
 // Creates a Policy using a "PolicyCreate" Struct.

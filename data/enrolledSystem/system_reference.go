@@ -1,4 +1,4 @@
-package enrolledSystem
+package enrolledsystem
 
 // Defines a system reference model.
 type SystemReference struct {

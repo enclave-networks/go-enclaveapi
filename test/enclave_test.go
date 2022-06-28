@@ -11,7 +11,7 @@ import (
 	"github.com/enclave-networks/go-enclaveapi/enclave"
 )
 
-var token string = "p9rcFksNsHALkfyqyfgRzYq4AXwcuxr22CN9Mc5PG42umHPUiPhnzX7kiRfdWM3"
+var token string = "mytoken"
 
 // https://stackoverflow.com/questions/47436263/how-to-mock-http-client-that-returns-a-json-response
 func Test_when_calling_organisation_get_returns_values(t *testing.T) {
@@ -44,14 +44,24 @@ func Test_when_calling_organisation_get_returns_values(t *testing.T) {
 }
 
 func Test_when_calling_organisation_returns_values(t *testing.T) {
-	enclaveClient := enclave.New(token)
+	testServer, err := createTestServer(200, nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	defer testServer.Close()
+
+	enclaveClient, err := enclave.NewWithUrl(token, testServer.URL)
+	if err != nil {
+		t.Error(err)
+	}
 
 	orgs, _ := enclaveClient.GetOrgs()
 
 	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
 
 	email := "tom.soulard+1337@enclave.io"
-	err := organisationClient.InviteUser(email)
+	err = organisationClient.InviteUser(email)
 
 	if err != nil {
 		t.Error(err)
@@ -74,8 +84,12 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 
 func createTestServer(expected int, httpMatches ...*HttpMatch) (*httptest.Server, error) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisation{
-			OrgId: organisation.OrganisationId("thing"),
+		accountOrganisationBody, _ := json.Marshal(&data.AccountOrganisationTopLevel{
+			Orgs: []data.AccountOrganisation{
+				{
+					OrgId: organisation.OrganisationId("thing"),
+				},
+			},
 		})
 
 		if req.RequestURI == "/account/orgs" {

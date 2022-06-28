@@ -1,4 +1,4 @@
-package enrolledSystem
+package enrolledsystem
 
 // The possible states of an enrolled system
 type SystemState int

@@ -1,4 +1,4 @@
-package enrolledSystem
+package enrolledsystem
 
 import (
 	"time"

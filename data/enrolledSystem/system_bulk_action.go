@@ -1,4 +1,4 @@
-package enrolledSystem
+package enrolledsystem
 
 // The result of a bulk system revocation
 type EnrolledSystemBulkRevokedResult struct {
