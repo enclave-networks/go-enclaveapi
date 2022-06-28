@@ -80,16 +80,16 @@ func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *Or
 		Systems: &EnrolledSystemsClient{
 			base: base,
 		},
-		EnrolmentKey: &EnrolmentKeyClient{
+		EnrolmentKeys: &EnrolmentKeyClient{
 			base: base,
 		},
 		Dns: &DnsClient{
 			base: base,
 		},
-		Policy: &PolicyClient{
+		Policies: &PolicyClient{
 			base: base,
 		},
-		TrustRequirement: &TrustRequirementsClient{
+		TrustRequirements: &TrustRequirementsClient{
 			base: base,
 		},
 	}
