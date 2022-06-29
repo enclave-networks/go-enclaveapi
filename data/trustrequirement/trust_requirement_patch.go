@@ -1,7 +1,7 @@
 package trustrequirement
 
 type TrustRequirementPatch struct {
-	Description string
-	Notes       string
-	Settings    TrustRequirementSettings
+	Description string                   `json:"Description,omitempty"`
+	Notes       string                   `json:"Notes,omitempty"`
+	Settings    TrustRequirementSettings `json:"Settings,omitempty"`
 }

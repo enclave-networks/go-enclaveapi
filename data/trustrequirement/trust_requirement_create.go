@@ -1,8 +1,8 @@
 package trustrequirement
 
 type TrustRequirementCreate struct {
-	Description string
-	Type        TrustRequirementType
-	Notes       string
-	Settings    TrustRequirementSettings
+	Description string                   `json:"Description,omitempty"`
+	Type        TrustRequirementType     `json:"Type,omitempty"`
+	Notes       string                   `json:"Notes,omitempty"`
+	Settings    TrustRequirementSettings `json:"Settings,omitempty"`
 }
