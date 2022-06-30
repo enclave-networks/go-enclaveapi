@@ -17,6 +17,7 @@ type OrganisationClient struct {
 	Dns               *DnsClient
 	Policies          *PolicyClient
 	TrustRequirements *TrustRequirementsClient
+	Tags              *TagsClient
 }
 
 // Get more detail on your current organisaiton.

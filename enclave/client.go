@@ -92,6 +92,9 @@ func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *Or
 		TrustRequirements: &TrustRequirementsClient{
 			base: base,
 		},
+		Tags: &TagsClient{
+			base: base,
+		},
 	}
 }
 
