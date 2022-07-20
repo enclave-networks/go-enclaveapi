@@ -1,11 +1,11 @@
 package policy
 
 // Defines the known protocols enforced in policy ACLs.
-type PolicyAclProtocol int
+type PolicyAclProtocol string
 
 const (
-	Any  PolicyAclProtocol = 0
-	Tcp  PolicyAclProtocol = 1
-	Udp  PolicyAclProtocol = 2
-	Icmp PolicyAclProtocol = 3
+	Any  PolicyAclProtocol = "Any"
+	Tcp  PolicyAclProtocol = "Tcp"
+	Udp  PolicyAclProtocol = "Udp"
+	Icmp PolicyAclProtocol = "Icmp"
 )

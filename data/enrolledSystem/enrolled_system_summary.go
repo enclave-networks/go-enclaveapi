@@ -3,8 +3,8 @@ package enrolledsystem
 import (
 	"time"
 
-	"github.com/enclave-networks/go-enclaveapi/data"
 	"github.com/enclave-networks/go-enclaveapi/data/enrolmentkey"
+	"github.com/enclave-networks/go-enclaveapi/data/tag"
 )
 
 // A basic model representing a single system.
@@ -24,6 +24,6 @@ type EnrolledSystemSummary struct {
 	PlatformType                 string
 	OSVersion                    string
 	EnclaveVersion               string
-	Tags                         []data.TagReference
+	Tags                         []tag.TagReference
 	DisconnectedRetentionMinutes int
 }

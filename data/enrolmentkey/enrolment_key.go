@@ -3,7 +3,7 @@ package enrolmentkey
 import (
 	"time"
 
-	"github.com/enclave-networks/go-enclaveapi/data"
+	"github.com/enclave-networks/go-enclaveapi/data/tag"
 )
 
 // An int backed Enrolment Key Id.
@@ -22,7 +22,7 @@ type EnrolmentKey struct {
 	UsesRemaining                int64
 	EnrolledCount                int64
 	UnapprovedCount              int64
-	Tags                         []data.TagReference
+	Tags                         []tag.TagReference
 	DisconnectedRetentionMinutes int
 	IpConstraints                []EnrolmentKeyIpConstraint
 	Notes                        string

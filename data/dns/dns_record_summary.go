@@ -1,8 +1,8 @@
 package dns
 
 import (
-	"github.com/enclave-networks/go-enclaveapi/data"
 	"github.com/enclave-networks/go-enclaveapi/data/enrolledsystem"
+	"github.com/enclave-networks/go-enclaveapi/data/tag"
 )
 
 // Model representing a summary of a DNS record.
@@ -13,6 +13,6 @@ type DnsRecordSummary struct {
 	ZoneId   DnsZoneId
 	ZoneName string
 	Fqdn     string
-	Tags     []data.TagReference
+	Tags     []tag.TagReference
 	Systems  []enrolledsystem.SystemReference
 }
