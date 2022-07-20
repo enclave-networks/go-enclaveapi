@@ -1,7 +1,6 @@
 package enclave
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -102,8 +101,6 @@ func (client *Client) CreateOrganisationClient(org data.AccountOrganisation) *Or
 func (client *Client) createEnclaveRequest(route string, method string, body io.Reader) (*http.Request, error) {
 	reqUrl := getRequestUrl(*client.baseURL, route)
 	req, err := http.NewRequest(method, reqUrl.String(), body)
-
-	fmt.Println(reqUrl.String())
 
 	if err != nil {
 		return nil, err

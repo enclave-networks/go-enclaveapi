@@ -16,5 +16,5 @@ type DetailedTag struct {
 	Policies          int
 	DnsRecords        int
 	Notes             string
-	TrustRequirements []trustrequirement.TrustRequirementId
+	TrustRequirements []trustrequirement.UsedTrustRequirement
 }
