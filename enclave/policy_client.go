@@ -33,7 +33,7 @@ func (client *PolicyClient) GetPolicies(searchTerm *string,
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (client *PolicyClient) Create(create policy.PolicyCreate) (policy.Policy, e
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -85,7 +85,7 @@ func (client *PolicyClient) Get(policyId policy.PolicyId) (policy.Policy, error)
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -114,7 +114,7 @@ func (client *PolicyClient) Update(policyId policy.PolicyId, patch policy.Policy
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -138,7 +138,7 @@ func (client *PolicyClient) Delete(policyId policy.PolicyId) (policy.Policy, err
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -162,7 +162,7 @@ func (client *PolicyClient) Enable(policyId policy.PolicyId) (policy.Policy, err
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -186,7 +186,7 @@ func (client *PolicyClient) Disable(policyId policy.PolicyId) (policy.Policy, er
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return policy.Policy{}, err
 	}
@@ -219,7 +219,7 @@ func (client *PolicyClient) DeletePolicies(policyIds ...policy.PolicyId) (int, e
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}
@@ -252,7 +252,7 @@ func (client *PolicyClient) EnalbePolicies(policyIds ...policy.PolicyId) (int, e
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}
@@ -285,7 +285,7 @@ func (client *PolicyClient) DisablePolicies(policyIds ...policy.PolicyId) (int, 
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}

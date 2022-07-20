@@ -33,7 +33,7 @@ func (client *OrganisationClient) Get() (organisation.Organisation, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return organisation.Organisation{}, err
 	}
@@ -61,7 +61,7 @@ func (client *OrganisationClient) Update(patch organisation.OrganisationPatch) (
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return organisation.Organisation{}, err
 	}
@@ -84,7 +84,7 @@ func (client *OrganisationClient) GetOrganisationUsers() ([]organisation.Organis
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func (client *OrganisationClient) RemoveUser(accountId account.AccountId) error 
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return err
 	}
@@ -129,7 +129,7 @@ func (client *OrganisationClient) GetPendingInvites() ([]organisation.Organisati
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +159,7 @@ func (client *OrganisationClient) InviteUser(emailAddress string) error {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return err
 	}
@@ -187,7 +187,7 @@ func (client *OrganisationClient) CancelUser(emailAddress string) error {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return err
 	}

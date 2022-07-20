@@ -33,7 +33,7 @@ func (client *TagsClient) GetTags(
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (client *TagsClient) Create(create tag.TagCreate) (tag.DetailedTag, error) 
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return tag.DetailedTag{}, err
 	}
@@ -94,7 +94,7 @@ func (client *TagsClient) DeleteTags(tagNameOrRef ...string) (int, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}
@@ -118,7 +118,7 @@ func (client *TagsClient) Get(tagNameOrRef string) (tag.DetailedTag, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return tag.DetailedTag{}, err
 	}
@@ -147,7 +147,7 @@ func (client *TagsClient) Update(tagNameOrRef string, patch tag.TagPatch) (tag.D
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return tag.DetailedTag{}, err
 	}
@@ -171,7 +171,7 @@ func (client *TagsClient) Delete(tagNameOrRef string) (tag.DetailedTag, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return tag.DetailedTag{}, err
 	}

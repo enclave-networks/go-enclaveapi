@@ -33,7 +33,7 @@ func (client *TrustRequirementsClient) GetTrustRequirements(
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (client *TrustRequirementsClient) Create(create trustrequirement.TrustRequi
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return trustrequirement.TrustRequirement{}, err
 	}
@@ -94,7 +94,7 @@ func (client *TrustRequirementsClient) DeleteTrustRequirements(trustRequirementI
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}
@@ -118,7 +118,7 @@ func (client *TrustRequirementsClient) Get(trustRequirementId trustrequirement.T
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return trustrequirement.TrustRequirement{}, err
 	}
@@ -147,7 +147,7 @@ func (client *TrustRequirementsClient) Update(requirementId trustrequirement.Tru
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return trustrequirement.TrustRequirement{}, err
 	}
@@ -171,7 +171,7 @@ func (client *TrustRequirementsClient) Delete(requirementId trustrequirement.Tru
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return trustrequirement.TrustRequirement{}, err
 	}

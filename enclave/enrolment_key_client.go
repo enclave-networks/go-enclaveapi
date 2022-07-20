@@ -34,7 +34,7 @@ func (client *EnrolmentKeyClient) GetEnrolmentKeys(
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (client *EnrolmentKeyClient) Create(create enrolmentkey.EnrolmentKeyCreate)
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
 	}
@@ -86,7 +86,7 @@ func (client *EnrolmentKeyClient) Get(enrolmentKeyId enrolmentkey.EnrolmentKeyId
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
 	}
@@ -115,7 +115,7 @@ func (client *EnrolmentKeyClient) Update(enrolmentKeyId enrolmentkey.EnrolmentKe
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
 	}
@@ -139,7 +139,7 @@ func (client *EnrolmentKeyClient) Enable(enrolmentKeyId enrolmentkey.EnrolmentKe
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
 	}
@@ -163,7 +163,7 @@ func (client *EnrolmentKeyClient) Disable(enrolmentKeyId int) (enrolmentkey.Enro
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return enrolmentkey.EnrolmentKey{}, err
 	}
@@ -196,7 +196,7 @@ func (client *EnrolmentKeyClient) BulkEnable(enrolmentKeyIds ...enrolmentkey.Enr
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}
@@ -229,7 +229,7 @@ func (client *EnrolmentKeyClient) BulkDisable(enrolmentKeyIds ...enrolmentkey.En
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return 0, err
 	}

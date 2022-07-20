@@ -37,7 +37,7 @@ func (client *EnrolledSystemsClient) GetSystems(
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (client *EnrolledSystemsClient) RevokeSystems(systemIds ...enrolledsystem.S
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return -1, err
 	}

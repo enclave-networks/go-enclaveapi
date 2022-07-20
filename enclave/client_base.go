@@ -34,7 +34,11 @@ func Encode(data any) (*bytes.Buffer, error) {
 // Decode an HTTP Response to Type of T
 func Decode[T any](response *http.Response) *T {
 	var toDecode = new(T)
-	json.NewDecoder(response.Body).Decode(toDecode)
+	err := json.NewDecoder(response.Body).Decode(toDecode)
+	if err != nil {
+		return nil
+	}
+
 	return toDecode
 }
 
@@ -73,10 +77,16 @@ func setRequestHeader(token *string, request *http.Request) {
 }
 
 // Check for a success status code (this logic is ported from the C# HttpClient)
-func isSuccessStatusCode(statusCode int) error {
-	isSuccess := statusCode >= 200 && statusCode <= 299
+func isSuccessStatusCode(response *http.Response) error {
+	isSuccess := response.StatusCode >= 200 && response.StatusCode <= 299
 	if !isSuccess {
-		return fmt.Errorf("status code does not indicate a successful response %v", statusCode)
+		data := Decode[data.HttpErrorResponse](response)
+
+		// if we have body data return error containing that information
+		if data != nil {
+			return fmt.Errorf("status code does not indicate a successful response %v \n error details \n title: %s \n detail: %s", response.StatusCode, data.Title, data.Detail)
+		}
+		return fmt.Errorf("status code does not indicate a successful response %v", response.StatusCode)
 	}
 
 	return nil

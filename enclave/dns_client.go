@@ -27,7 +27,7 @@ func (client *DnsClient) GetPropertiesSummary() (dns.DnsSummary, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsSummary{}, err
 	}
@@ -52,7 +52,7 @@ func (client *DnsClient) GetZones(pageNumber *int, perPage *int) (*data.Paginate
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (client *DnsClient) CreateZone(create dns.DnsZoneCreate) (dns.DnsZone, erro
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsZone{}, err
 	}
@@ -104,7 +104,7 @@ func (client *DnsClient) GetZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error) {
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsZone{}, err
 	}
@@ -133,7 +133,7 @@ func (client *DnsClient) UpdateZone(dnsZoneId dns.DnsZoneId, patch dns.DnsZonePa
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsZone{}, err
 	}
@@ -157,7 +157,7 @@ func (client *DnsClient) DeleteZone(dnsZoneId dns.DnsZoneId) (dns.DnsZone, error
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsZone{}, err
 	}
@@ -186,7 +186,7 @@ func (client *DnsClient) GetRecords(
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func (client *DnsClient) CreateRecord(create dns.DnsRecordCreate) (dns.DnsRecord
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsRecord{}, err
 	}
@@ -243,7 +243,7 @@ func (client *DnsClient) GetRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecord, 
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsRecord{}, err
 	}
@@ -272,7 +272,7 @@ func (client *DnsClient) UpdateRecord(dnsRecordId dns.DnsRecordId, patch dns.Dns
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsRecord{}, err
 	}
@@ -296,7 +296,7 @@ func (client *DnsClient) DeleteRecord(dnsRecordId dns.DnsRecordId) (dns.DnsRecor
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return dns.DnsRecord{}, err
 	}
@@ -328,7 +328,7 @@ func (client *DnsClient) DeleteRecords(recordIds ...dns.DnsRecordId) (int, error
 	}
 	defer response.Body.Close()
 
-	err = isSuccessStatusCode(response.StatusCode)
+	err = isSuccessStatusCode(response)
 	if err != nil {
 		return -1, err
 	}
