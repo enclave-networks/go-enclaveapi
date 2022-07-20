@@ -2,14 +2,12 @@ package enclaveclient_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/enclave-networks/go-enclaveapi/data"
 	"github.com/enclave-networks/go-enclaveapi/data/organisation"
-	"github.com/enclave-networks/go-enclaveapi/data/tag"
 	"github.com/enclave-networks/go-enclaveapi/enclave"
 )
 
@@ -107,30 +105,6 @@ func Test_when_calling_organisation_returns_values(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-}
-
-func Test_thing(t *testing.T) {
-	token := "mKz68Bt2Pa43bs2qhagNEBs3k5mqZ2Kxpdj1nPkbf9DG3YzhSS8EbGatFMiEu36"
-	enclaveClient, err := enclave.NewWithUrl(token, "http://localhost:8081")
-	if err != nil {
-		t.Error(err)
-	}
-
-	orgs, err := enclaveClient.GetOrgs()
-	if err != nil {
-		t.Error(err)
-	}
-
-	organisationClient := enclaveClient.CreateOrganisationClient(orgs[0])
-
-	tagModel, err := organisationClient.Tags.Create(tag.TagCreate{
-		Tag: "aws",
-	})
-	if err != nil {
-		t.Error(err)
-	}
-
-	fmt.Print(tagModel.Tag)
 }
 
 func createTestServer(httpMatches ...*HttpMatch) (*httptest.Server, error) {

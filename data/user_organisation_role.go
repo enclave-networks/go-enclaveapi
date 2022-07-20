@@ -1,8 +1,8 @@
 package data
 
-type UserOrganisationRole int64
+type UserOrganisationRole string
 
 const (
-	Owner UserOrganisationRole = 0
-	Admin UserOrganisationRole = 1
+	Owner UserOrganisationRole = "Owner"
+	Admin UserOrganisationRole = "Admin"
 )
