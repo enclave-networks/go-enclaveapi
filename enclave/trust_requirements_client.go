@@ -189,7 +189,7 @@ func buildTrustRequirementQuery(req *http.Request, searchTerm *string, sortOrder
 	}
 
 	if sortOrder != nil {
-		query.Add("sort", strconv.FormatInt(int64(*sortOrder), 10))
+		query.Add("sort", string(*sortOrder))
 	}
 
 	if pageNumber != nil {

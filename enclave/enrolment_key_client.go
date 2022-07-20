@@ -251,7 +251,7 @@ func buildEnrolmentKeyQuery(req *http.Request, searchTerm *string, includeDisabl
 	}
 
 	if sortOrder != nil {
-		query.Add("sort", strconv.FormatInt(int64(*sortOrder), 10))
+		query.Add("sort", string(*sortOrder))
 	}
 
 	if pageNumber != nil {

@@ -1,9 +1,9 @@
 package trustrequirement
 
 //Defines a type of trust requirement, that generally indicates how that requirement is evaluated.
-type TrustRequirementType int
+type TrustRequirementType string
 
 const (
-	UserAuthentication TrustRequirementType = 0
-	PublicIp           TrustRequirementType = 1
+	UserAuthentication TrustRequirementType = "UserAuthentication"
+	PublicIp           TrustRequirementType = "PublicIp"
 )

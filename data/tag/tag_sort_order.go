@@ -1,9 +1,9 @@
 package tag
 
-type TagQuerySortOrder int
+type TagQuerySortOrder string
 
 const (
-	Alphabetical      TagQuerySortOrder = 0
-	RecentlyUsed      TagQuerySortOrder = 1
-	ReferencedSystems TagQuerySortOrder = 2
+	Alphabetical      TagQuerySortOrder = "Alphabetical"
+	RecentlyUsed      TagQuerySortOrder = "RecentlyUsed"
+	ReferencedSystems TagQuerySortOrder = "ReferencedSystems"
 )

@@ -1,10 +1,10 @@
 package enrolledsystem
 
 // The possible states of an enrolled system
-type SystemState int
+type SystemState string
 
 const (
-	Disabled     SystemState = 0
-	Disconnected SystemState = 1
-	Connected    SystemState = 2
+	Disabled     SystemState = "Disabled"
+	Disconnected SystemState = "Disconnected"
+	Connected    SystemState = "Connected"
 )

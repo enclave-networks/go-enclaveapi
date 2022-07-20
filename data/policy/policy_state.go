@@ -1,10 +1,10 @@
 package policy
 
 // Defines the possible states of policies.
-type PolicyState int
+type PolicyState string
 
 const (
-	Disabled       PolicyState = 0
-	Active         PolicyState = 1
-	InactiveNoAcls PolicyState = 2
+	Disabled       PolicyState = "Disabled"
+	Active         PolicyState = "Active"
+	InactiveNoAcls PolicyState = "InactiveNoAcls"
 )

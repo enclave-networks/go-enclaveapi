@@ -1,9 +1,9 @@
 package policy
 
 // The sort order when making a Policy Request.
-type PolicySortOrder int
+type PolicySortOrder string
 
 const (
-	Description     PolicySortOrder = 0
-	RecentlyCreated PolicySortOrder = 1
+	Description     PolicySortOrder = "Description"
+	RecentlyCreated PolicySortOrder = "RecentlyCreated"
 )

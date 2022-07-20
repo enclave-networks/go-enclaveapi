@@ -307,7 +307,7 @@ func buildPolicyQuery(req *http.Request, searchTerm *string, includeDisabled *bo
 	}
 
 	if sortOrder != nil {
-		query.Add("sort", strconv.FormatInt(int64(*sortOrder), 10))
+		query.Add("sort", string(*sortOrder))
 	}
 
 	if pageNumber != nil {

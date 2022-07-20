@@ -26,11 +26,11 @@ const (
 )
 
 // Enrolment Key Sort Order used when making an Enrolment Key request.
-type EnrolmentKeySortOrder int
+type EnrolmentKeySortOrder string
 
 const (
-	Description   EnrolmentKeySortOrder = 0
-	LastUsed      EnrolmentKeySortOrder = 1
-	ApprovalMode  EnrolmentKeySortOrder = 2
-	UsesRemaining EnrolmentKeySortOrder = 3
+	Description   EnrolmentKeySortOrder = "Description"
+	LastUsed      EnrolmentKeySortOrder = "LastUsed"
+	ApprovalMode  EnrolmentKeySortOrder = "ApprovalMode"
+	UsesRemaining EnrolmentKeySortOrder = "UsesRemaining"
 )
